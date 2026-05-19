@@ -220,14 +220,10 @@ function getSheetTop(){
 }
 
 function updateCameraForSheet(){
-  // Загвар мэдээллийн дээд ирмэгээс дээш 60px байрлалд харагдана
-  const sheetTop = getSheetTop();
-  const targetY  = sheetTop - 60; // px, дэлгэцийн дээд талаас
-  // NDC координат руу хөрвүүлэх (-1..1)
+  // Дэлгэцийн дээд ирмэгээс 400px доор загвар харагдана
+  const targetY = 400; // px, дэлгэцийн дээд талаас
+  // NDC: дээд=1, доод=-1, дунд=0
   const ndcY = 1 - (targetY / window.innerHeight) * 2;
-  // camera lookAt-ийн y-г тохируулна
-  // ndcY 0 = дунд, 1 = дээд, -1 = доод
-  // Three.js-д lookAt y = ndcY * tan(fov/2) * distance
   const fovRad = camera.fov * Math.PI / 180;
   const dist   = camera.position.z;
   const worldY = ndcY * Math.tan(fovRad/2) * dist;
