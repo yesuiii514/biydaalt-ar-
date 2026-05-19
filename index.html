@@ -221,7 +221,7 @@ function getSheetTop(){
 
 function updateCameraForSheet(){
   // Дэлгэцийн дээд ирмэгээс 400px доор загвар харагдана
-  const targetY = 200; // px, дэлгэцийн дээд талаас
+  const targetY = 600; // px, дэлгэцийн дээд талаас
   // NDC: дээд=1, доод=-1, дунд=0
   const ndcY = 1 - (targetY / window.innerHeight) * 2;
   const fovRad = camera.fov * Math.PI / 180;
