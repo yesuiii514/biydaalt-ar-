@@ -9,9 +9,8 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Segoe UI',sans-serif}
 
 #video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none}
-#three-canvas{position:fixed;inset:0;width:100%!important;height:100%!important;z-index:5;display:none;touch-action:none}
+#three-canvas{position:fixed;inset:0;width:100%!important;height:100%!important;z-index:10;display:none;touch-action:none}
 
-/* OVERLAY */
 #overlay{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0d0d0d,#1a1200);color:#fff;padding:32px}
 #overlay.hidden{display:none}
 .logo-big{font-size:64px;margin-bottom:16px;animation:floatY 3s ease-in-out infinite}
@@ -33,94 +32,93 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .err-step b{color:#e8a838}
 .retry-btn{background:#e8a838;color:#000;border:none;border-radius:50px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer}
 
-/* ── BOTTOM SHEET — info + strip хоёулаа доор ── */
+#ghint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:41;pointer-events:none;display:none;background:rgba(0,0,0,.65);border-radius:20px;padding:7px 20px;font-size:14px;color:rgba(255,255,255,.85);white-space:nowrap}
+
+/* ── BOTTOM SHEET ── */
 #bottom-sheet{
   position:fixed;bottom:0;left:0;right:0;z-index:40;
-  display:none;
-  flex-direction:column;
+  display:none;flex-direction:column;
 }
 
-/* INFO панель — доод sheet-ийн дээд хэсэг */
+/* INFO */
 #info{
-  background:rgba(8,8,8,.96);
-  border-top:.5px solid rgba(232,168,56,.25);
-  border-radius:20px 20px 0 0;
-  display:none;
-  overflow:hidden;
+  background:rgba(8,8,8,.97);
+  border-top:.5px solid rgba(232,168,56,.2);
+  border-radius:22px 22px 0 0;
+  display:none;position:relative;
 }
 .info-close{
-  position:absolute;top:12px;right:12px;
+  position:absolute;top:14px;right:14px;
   background:rgba(255,255,255,.1);border:none;color:#fff;
-  width:28px;height:28px;border-radius:50%;font-size:13px;cursor:pointer;
+  width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;z-index:2;
 }
+
 /* Нэр + үнэ */
 .info-top{
-  display:flex;align-items:flex-start;justify-content:space-between;
-  padding:14px 44px 8px 16px;
-  border-bottom:.5px solid rgba(255,255,255,.06);
-  position:relative;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:18px 52px 12px 20px;
+  border-bottom:.5px solid rgba(255,255,255,.07);
 }
-.info-name{font-size:18px;font-weight:700;color:#fff;margin-bottom:2px}
-.info-price{font-size:20px;font-weight:800;color:#e8a838;white-space:nowrap;padding-top:2px}
+.info-name{font-size:22px;font-weight:700;color:#fff}
+.info-price{font-size:24px;font-weight:800;color:#e8a838;white-space:nowrap;margin-left:8px}
 
-/* Stats pills мөр */
+/* Stats */
 .info-stats{
-  display:flex;gap:6px;padding:8px 16px;
-  border-bottom:.5px solid rgba(255,255,255,.06);
+  display:flex;gap:8px;padding:12px 20px;
+  border-bottom:.5px solid rgba(255,255,255,.07);
   overflow-x:auto;scrollbar-width:none;
 }
 .info-stats::-webkit-scrollbar{display:none}
 .stat-pill{
-  display:flex;align-items:center;gap:4px;
-  background:rgba(255,255,255,.07);border-radius:20px;
-  padding:4px 10px;white-space:nowrap;flex-shrink:0;
+  display:flex;align-items:center;gap:5px;
+  border-radius:22px;padding:6px 13px;
+  white-space:nowrap;flex-shrink:0;
 }
-.stat-pill span{font-size:12px;color:rgba(255,255,255,.75)}
-.stat-pill.gold{background:rgba(232,168,56,.12)}
+.stat-pill span{font-size:13px;font-weight:500}
+.stat-pill.gold{background:rgba(232,168,56,.15);border:.5px solid rgba(232,168,56,.3)}
 .stat-pill.gold span{color:#e8a838}
-.stat-pill.red{background:rgba(255,80,50,.1)}
+.stat-pill.gray{background:rgba(255,255,255,.07);border:.5px solid rgba(255,255,255,.1)}
+.stat-pill.gray span{color:rgba(255,255,255,.75)}
+.stat-pill.red{background:rgba(255,90,50,.1);border:.5px solid rgba(255,90,50,.25)}
 .stat-pill.red span{color:#ff8a65}
 
 /* Tags */
 .info-tags{
-  display:flex;gap:5px;padding:7px 16px;
-  border-bottom:.5px solid rgba(255,255,255,.06);
+  display:flex;gap:7px;padding:10px 20px;
+  border-bottom:.5px solid rgba(255,255,255,.07);
   flex-wrap:wrap;
 }
-.tag{font-size:11px;font-weight:500;border-radius:6px;padding:3px 8px;border:.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.6)}
-.tag.hot{border-color:rgba(255,100,50,.4);color:#ff8a65}
-.tag.gold{border-color:rgba(232,168,56,.4);color:#e8a838}
-.tag.green{border-color:rgba(100,200,100,.4);color:#81c784}
+.tag{font-size:12px;font-weight:600;border-radius:8px;padding:4px 11px;border:.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65)}
+.tag.hot{border-color:rgba(255,100,50,.45);color:#ff8a65;background:rgba(255,90,50,.08)}
+.tag.gold{border-color:rgba(232,168,56,.45);color:#e8a838;background:rgba(232,168,56,.08)}
+.tag.green{border-color:rgba(100,200,100,.4);color:#81c784;background:rgba(100,200,100,.08)}
 
 /* Орц */
-.info-ingr{padding:8px 16px 12px}
-.ingr-label{font-size:10px;color:rgba(255,255,255,.3);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
-.ingr-text{font-size:12px;color:rgba(255,255,255,.5);line-height:1.6}
+.info-ingr{padding:12px 20px 16px}
+.ingr-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
+.ingr-text{font-size:14px;color:rgba(255,255,255,.6);line-height:1.65}
 
 /* Strip */
 #strip-wrap{
-  background:rgba(6,6,6,.97);
-  padding:10px 12px 28px;
-  border-top:.5px solid rgba(255,255,255,.06);
+  background:rgba(5,5,5,.98);
+  padding:10px 14px 32px;
+  border-top:.5px solid rgba(255,255,255,.05);
 }
-.hint-txt{text-align:center;color:rgba(255,255,255,.4);font-size:11px;margin-bottom:8px}
+.hint-txt{text-align:center;color:rgba(255,255,255,.35);font-size:11px;margin-bottom:9px}
 .scroll-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .scroll-strip::-webkit-scrollbar{display:none}
 .strip-card{
-  min-width:100px;flex-shrink:0;
-  background:rgba(20,20,20,.95);border:.5px solid rgba(255,255,255,.1);
-  border-radius:14px;padding:10px 8px;cursor:pointer;
+  min-width:110px;flex-shrink:0;
+  background:rgba(18,18,18,.98);border:.5px solid rgba(255,255,255,.1);
+  border-radius:16px;padding:11px 10px;cursor:pointer;
   transition:border-color .2s,transform .15s;text-align:center;
 }
-.strip-card.active{border-color:#e8a838;box-shadow:0 0 12px rgba(232,168,56,.3)}
+.strip-card.active{border-color:#e8a838;box-shadow:0 0 14px rgba(232,168,56,.3)}
 .strip-card:active{transform:scale(.96)}
-.strip-name{font-size:11px;font-weight:600;color:#fff;margin-bottom:3px;line-height:1.3}
-.strip-price{font-size:11px;color:#e8a838;font-weight:700}
-.strip-meta{font-size:10px;color:rgba(255,255,255,.3);margin-top:2px}
-
-/* Gesture hint */
-#ghint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:41;pointer-events:none;display:none;background:rgba(0,0,0,.65);border-radius:20px;padding:6px 18px;font-size:13px;color:rgba(255,255,255,.8);white-space:nowrap}
+.strip-name{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3}
+.strip-price{font-size:12px;color:#e8a838;font-weight:700;margin-bottom:3px}
+.strip-meta{font-size:10px;color:rgba(255,255,255,.3)}
 </style>
 </head>
 <body>
@@ -150,9 +148,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   <button class="retry-btn" onclick="location.reload()">🔄 Дахин оролдох</button>
 </div>
 
-<!-- BOTTOM SHEET: info дээр, strip доор -->
 <div id="bottom-sheet">
-  <!-- Info panel -->
   <div id="info">
     <button class="info-close" onclick="closeInfo()">✕</button>
     <div class="info-top">
@@ -160,14 +156,12 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <div class="info-price" id="iPrice"></div>
     </div>
     <div class="info-stats" id="iStats"></div>
-    <div class="info-tags" id="iTags"></div>
+    <div class="info-tags"  id="iTags"></div>
     <div class="info-ingr">
       <div class="ingr-label">Орц найрлага</div>
       <div class="ingr-text" id="iIngr"></div>
     </div>
   </div>
-
-  <!-- Strip -->
   <div id="strip-wrap">
     <div class="hint-txt" id="bottom-hint">👇 Хоол сонгоно уу</div>
     <div class="scroll-strip" id="strip"></div>
@@ -181,65 +175,58 @@ const MENU = [
   {
     name:"Гоймон", price:"₮12,000", glb:"noodle.glb",
     kcal:520, time:15, rating:4.4, orders:38,
-    tags:[{l:"🌶️ Халуун",c:"hot"},{l:"🔥 Хит",c:"gold"}],
-    labels:["Шөл","Гурил"],
+    tags:[{l:"🌶️ Халуун",c:"hot"},{l:"🔥 Хит",c:"gold"},{l:"Шөл",c:""},{l:"Гурил",c:""}],
     ingr:"Гар гурил, тэмээний мах, өндөг, гүчүжан, сонгино, давс",
   },
   {
     name:"Пицца", price:"₮25,000", glb:"pizza.glb",
     kcal:890, time:25, rating:4.7, orders:61,
-    tags:[{l:"⭐ Бестселлер",c:"gold"},{l:"🧀 Бяслаг",c:""}],
-    labels:["Шарсан","Итали"],
+    tags:[{l:"⭐ Бестселлер",c:"gold"},{l:"🧀 Бяслаг",c:""},{l:"Шарсан",c:""},{l:"Итали",c:""}],
     ingr:"Гурил, улаан лооль соус, хиам, моцарелла бяслаг, BBQ соус, чинжүү",
   },
   {
     name:"Бургер", price:"₮18,000", glb:"burger.glb",
     kcal:740, time:12, rating:4.2, orders:45,
-    tags:[{l:"🥩 Мах",c:"hot"},{l:"🧀 Бяслаг",c:""}],
-    labels:["Шарсан","Шинэ"],
+    tags:[{l:"🥩 Мах",c:"hot"},{l:"🧀 Бяслаг",c:""},{l:"Шарсан",c:""},{l:"Шинэ",c:""}],
     ingr:"Үхрийн мах, талх, помидор, огурец, бяслаг, байцаа, майонез",
   },
   {
     name:"Хот дог", price:"₮5,000", glb:"hotdog.glb",
     kcal:310, time:5, rating:3.9, orders:29,
-    tags:[{l:"⚡ Хурдан",c:"green"},{l:"💛 Хямд",c:"gold"}],
-    labels:["Шарсан","Франк"],
+    tags:[{l:"⚡ Хурдан",c:"green"},{l:"💛 Хямд",c:"gold"},{l:"Шарсан",c:""},{l:"Франк",c:""}],
     ingr:"Франкфурт сосиск, хот дог талх, горчица, кетчуп, сонгино",
   },
 ];
 
 let renderer, scene, camera, clock;
-let activeIdx = null;
-const cache = {};
-let currentModel = null;
+let activeIdx=null, currentModel=null;
+const cache={};
 let rotX=0.15, rotY=0, modelScale=0.5;
 const SCALE_MIN=0.1, SCALE_MAX=10;
 let drag=null, pinch=null, autoRotate=true, lastTouch=0;
 
 document.getElementById('startBtn').addEventListener('click', startCamera);
 
-async function startCamera() {
+async function startCamera(){
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('loading').style.display='flex';
   document.getElementById('load-msg').textContent='Камер нээж байна...';
 
   let stream=null, lastErr=null;
-  for (const c of [
+  for(const c of [
     {video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false},
     {video:{facingMode:{ideal:'environment'}},audio:false},
     {video:true,audio:false},
-  ]) {
+  ]){
     try{stream=await navigator.mediaDevices.getUserMedia(c);break;}
     catch(e){lastErr=e;}
   }
-
   if(!stream){
     document.getElementById('loading').style.display='none';
     document.getElementById('err-detail').textContent=lastErr?lastErr.name+': '+lastErr.message:'';
     document.getElementById('err-panel').style.display='flex';
     return;
   }
-
   const vid=document.getElementById('video');
   vid.srcObject=stream; vid.style.display='block';
   try{await vid.play();}catch(e){vid.oncanplay=()=>vid.play().catch(()=>{});}
@@ -248,7 +235,6 @@ async function startCamera() {
     const t=setTimeout(res,2000);
     vid.addEventListener('loadedmetadata',()=>{clearTimeout(t);res();},{once:true});
   });
-
   document.getElementById('loading').style.display='none';
   initThree();
   buildStrip();
@@ -258,24 +244,19 @@ async function startCamera() {
 
 function initThree(){
   const canvas=document.getElementById('three-canvas');
-  const W=window.innerWidth, H=window.innerHeight;
+  const W=window.innerWidth,H=window.innerHeight;
   renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setSize(W,H);
-  renderer.setClearColor(0,0);
-  scene=new THREE.Scene();
-  clock=new THREE.Clock();
+  renderer.setSize(W,H); renderer.setClearColor(0,0);
+  scene=new THREE.Scene(); clock=new THREE.Clock();
   camera=new THREE.PerspectiveCamera(45,W/H,0.01,100);
-  camera.position.set(0,1.2,3.5);
-  camera.lookAt(0,0,0);
-
+  camera.position.set(0,0.4,3.5); camera.lookAt(0,0.6,0);
   scene.add(new THREE.AmbientLight(0xffffff,0.8));
   const dir=new THREE.DirectionalLight(0xfff5e0,1.4);
   dir.position.set(2,4,3);scene.add(dir);
   const fill=new THREE.PointLight(0xe8a838,0.5,12);
   fill.position.set(-2,2,1);scene.add(fill);
   scene.add(new THREE.DirectionalLight(0xffffff,0.3)).position.set(0,-2,-3);
-
   canvas.addEventListener('touchstart',onTS,{passive:false});
   canvas.addEventListener('touchmove', onTM,{passive:false});
   canvas.addEventListener('touchend',  onTE,{passive:false});
@@ -320,7 +301,6 @@ function onTE(e){
   setTimeout(()=>{if(Date.now()-lastTouch>=2000)autoRotate=true;},2000);
 }
 function tDist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
-
 let hTimer;
 function showHint(m){const el=document.getElementById('ghint');el.textContent=m;el.style.display='block';clearTimeout(hTimer);}
 function hideHint(){hTimer=setTimeout(()=>{document.getElementById('ghint').style.display='none';},900);}
@@ -331,7 +311,7 @@ function loadGLB(file,cb){
     const m=gltf.scene;
     const box=new THREE.Box3().setFromObject(m);
     const mx=Math.max(...box.getSize(new THREE.Vector3()).toArray());
-    const sc=1.0/mx;m.scale.setScalar(sc);
+    const sc=1.0/mx; m.scale.setScalar(sc);
     const c=box.getCenter(new THREE.Vector3());
     m.position.set(-c.x*sc,-c.y*sc,-c.z*sc);
     cache[file]=m;cb(m);
@@ -344,22 +324,19 @@ function selectItem(idx){
   const item=MENU[idx];
   document.querySelectorAll('.strip-card').forEach((el,i)=>el.classList.toggle('active',i===idx));
 
-  // Info fill
   document.getElementById('iName').textContent=item.name;
   document.getElementById('iPrice').textContent=item.price;
   document.getElementById('iStats').innerHTML=`
     <div class="stat-pill gold"><span>⭐ ${item.rating}</span></div>
-    <div class="stat-pill"><span>🕐 ${item.time} мин</span></div>
-    <div class="stat-pill"><span>🔥 ${item.kcal} ккал</span></div>
+    <div class="stat-pill gray"><span>🕐 ${item.time} мин</span></div>
+    <div class="stat-pill gray"><span>🔥 ${item.kcal} ккал</span></div>
     <div class="stat-pill red"><span>📦 ${item.orders}x өнөөдөр</span></div>`;
   document.getElementById('iTags').innerHTML=
-    item.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('')+
-    item.labels.map(l=>`<span class="tag">${l}</span>`).join('');
+    item.tags.map(t=>`<span class="tag ${t.c}">${t.l}</span>`).join('');
   document.getElementById('iIngr').textContent=item.ingr;
   document.getElementById('info').style.display='block';
   document.getElementById('bottom-hint').textContent='☝️ Эргүүлж томруулж харна уу';
 
-  // 3D
   if(currentModel){scene.remove(currentModel);currentModel=null;}
   document.getElementById('three-canvas').style.display='none';
   if(!cache[item.glb]){
