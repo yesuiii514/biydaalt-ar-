@@ -81,8 +81,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 <div id="overlay">
   <div class="logo-big">🍜</div>
   <div class="ov-title">AR МЕНЮ</div>
-  <div class="ov-sub">Хоол сонгоод ширээн дээр<br>тавьж харна уу</div>
-  <button class="start-btn" id="startXRBtn">✨ AR горим (iOS/Android)</button>
+  <div class="ov-sub">Хоолоо сонгож харна уу</div>
   <button class="start-btn secondary" id="startBtn">📷 Камер горим</button>
 </div>
 
@@ -138,118 +137,11 @@ let currentModel = null;
 let rotX = 0.15, rotY = 0, modelScale = 0.5;
 const SCALE_MIN = 0.1, SCALE_MAX = 10;
 let drag = null, pinch = null, autoRotate = true, lastTouch = 0;
-
-// XR mode state
-let xrSession = null, xrRefSpace = null, hitTestSource = null;
-let reticleXR = null;       // Three.js mesh shown at hit point
-let placedGroup = null;     // currently selected model clone for placement
-let xrPlacedModels = [];    // all placed models
-let hitPose = null;         // latest hit test pose matrix
+      
 
 // ── Buttons ───────────────────────────────────────
-document.getElementById('startXRBtn').addEventListener('click', startXR);
 document.getElementById('startBtn').addEventListener('click', startCamera);
 document.getElementById('place-btn').addEventListener('click', placeXR);
-
-// ── XR START ─────────────────────────────────────
-async function startXR() {
-  if (!navigator.xr) { return fallbackCamera('WebXR дэмжигдэхгүй байна'); }
-
-  const supported = await navigator.xr.isSessionSupported('immersive-ar').catch(() => false);
-  if (!supported) { return fallbackCamera('Таны утас AR дэмжихгүй байна'); }
-
-  document.getElementById('overlay').classList.add('hidden');
-  document.getElementById('loading').style.display = 'flex';
-  document.getElementById('load-msg').textContent  = 'AR горим нээж байна...';
-
-  try {
-    xrSession = await navigator.xr.requestSession('immersive-ar', {
-      requiredFeatures: ['hit-test'],
-      optionalFeatures: ['dom-overlay', 'light-estimation'],
-      domOverlay: { root: document.body },
-    });
-  } catch(e) {
-    return fallbackCamera('AR session: ' + e.message);
-  }
-
-  useXR = true;
-  initThreeXR();
-  buildStrip();
-  document.getElementById('loading').style.display = 'none';
-  document.getElementById('bottom').style.display  = 'block';
-  MENU.forEach(item => loadGLB(item.glb, ()=>{}));
-}
-
-function initThreeXR() {
-  const canvas = document.getElementById('three-canvas');
-  renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.setClearColor(0,0);
-  renderer.xr.enabled = true;
-  renderer.xr.setSession(xrSession);
-
-  scene  = new THREE.Scene();
-  clock  = new THREE.Clock();
-  camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.01, 20);
-
-  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-  const d = new THREE.DirectionalLight(0xfff5e0, 1.2);
-  d.position.set(1,3,2); scene.add(d);
-
-  // Reticle mesh — flat ring on surface
-  const geo = new THREE.RingGeometry(0.06, 0.1, 32);
-  geo.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI/2));
-  const mat = new THREE.MeshBasicMaterial({color:0xe8a838, transparent:true, opacity:0.85, side:THREE.DoubleSide});
-  reticleXR = new THREE.Mesh(geo, mat);
-  reticleXR.visible = false;
-  scene.add(reticleXR);
-
-  canvas.style.display = 'block';
-
-  // XR reference spaces & hit test
-  xrSession.addEventListener('end', ()=>{ xrSession=null; location.reload(); });
-
-  xrSession.requestReferenceSpace('viewer').then(vs => {
-    xrSession.requestHitTestSource({space:vs}).then(src => { hitTestSource = src; });
-  });
-  xrSession.requestReferenceSpace('local').then(rs => { xrRefSpace = rs; });
-
-  renderer.setAnimationLoop(xrFrame);
-}
-
-function xrFrame(time, frame) {
-  if (!frame) return;
-  const t = clock.getElapsedTime();
-
-  // Hit test
-  if (hitTestSource && xrRefSpace) {
-    const hits = frame.getHitTestResults(hitTestSource);
-    if (hits.length > 0) {
-      const pose = hits[0].getPose(xrRefSpace);
-      hitPose = pose.transform;
-      reticleXR.visible = true;
-      reticleXR.matrix.fromArray(hitPose.matrix);
-      reticleXR.matrix.decompose(reticleXR.position, reticleXR.quaternion, reticleXR.scale);
-
-      // Move placement preview to hit point
-      if (placedGroup) {
-        placedGroup.position.setFromMatrixPosition(new THREE.Matrix4().fromArray(hitPose.matrix));
-        placedGroup.visible = true;
-      }
-
-      // Show reticle UI & place button if item selected
-      if (activeIdx !== null) {
-        document.getElementById('reticle').style.display   = 'flex';
-        document.getElementById('place-btn').style.display = 'block';
-        document.getElementById('reticle-label').textContent = '📍 Энд тавих товчийг дарна уу';
-      }
-    } else {
-      reticleXR.visible = false;
-      if (placedGroup) placedGroup.visible = false;
-      document.getElementById('reticle-label').textContent = 'Ширээрүү чиглүүлнэ үү';
-    }
-  }
 
   // Rotate placed models slowly
   xrPlacedModels.forEach(m => { m.rotation.y = t*0.4 + m.userData.ro; });
@@ -261,7 +153,6 @@ function xrFrame(time, frame) {
   }
 
   renderer.render(scene, camera);
-}
 
 function placeXR() {
   if (!hitPose || activeIdx === null) return;
