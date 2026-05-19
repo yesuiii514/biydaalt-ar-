@@ -32,7 +32,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   flex-direction:column;align-items:center;justify-content:center;
   background:rgba(0,0,0,.96);color:#fff;padding:32px;text-align:center;
 }
-.err-steps{background:rgba(255,255,255,.06);border-radius:16px;padding:18px 20px;text-align:left;width:100%;max-width:360px;margin-bottom:24px}
+.err-steps{background:rgba(255,255,255,.06);border-radius:16px;padding:18px 20px;text-align:left;width:100%;max-width:360px;margin:16px 0 24px}
 .err-step{font-size:13px;color:rgba(255,255,255,.75);padding:8px 0;border-bottom:.5px solid rgba(255,255,255,.08);line-height:1.5}
 .err-step:last-child{border:none}
 .err-step b{color:#e8a838}
@@ -59,30 +59,34 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   display:flex;align-items:center;justify-content:center;
 }
 
-/* Canvas — full area above bottom strip, touch enabled */
-#three-canvas{
+/* Canvas — responsive, fills space between info panel and bottom strip */
+#canvas-wrap{
   position:fixed;
-  left:50%;top:calc(50% - 40px);
-  transform:translate(-50%,-58%);
-  width:320px;height:320px;
-  z-index:10;display:none;
+  left:0;right:0;
+  z-index:10;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  touch-action:none;
+}
+#three-canvas{
+  display:block;
   touch-action:none;
 }
 
 /* Gesture hint */
 #gesture-hint{
-  position:fixed;left:50%;z-index:11;
-  transform:translateX(-50%);
-  display:none;
-  background:rgba(0,0,0,.55);border-radius:20px;
-  padding:5px 14px;font-size:12px;color:rgba(255,255,255,.6);
-  white-space:nowrap;pointer-events:none;
+  position:fixed;left:50%;transform:translateX(-50%);
+  z-index:41;pointer-events:none;display:none;
+  background:rgba(0,0,0,.6);border-radius:20px;
+  padding:5px 16px;font-size:12px;color:rgba(255,255,255,.7);
+  white-space:nowrap;
 }
 
 #loading{
   position:fixed;inset:0;z-index:45;display:none;
   align-items:center;justify-content:center;
-  flex-direction:column;gap:16px;color:#fff;
+  flex-direction:column;gap:16px;
   background:rgba(0,0,0,.55);
 }
 .spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.15);border-top-color:#e8a838;border-radius:50%;animation:spin .8s linear infinite}
@@ -113,16 +117,16 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .strip-price{font-size:11px;color:#e8a838;font-weight:700}
 
 #glow-ring{
-  position:fixed;left:50%;top:50%;
-  transform:translate(-50%,60px);
-  width:160px;height:24px;
-  background:radial-gradient(ellipse,rgba(232,168,56,.45) 0%,transparent 70%);
+  position:fixed;left:50%;
+  width:55%;max-width:240px;height:20px;
+  background:radial-gradient(ellipse,rgba(232,168,56,.5) 0%,transparent 70%);
   z-index:9;display:none;
+  transform:translateX(-50%);
   animation:ringPulse 2s ease-in-out infinite;
 }
 @keyframes ringPulse{
-  0%,100%{opacity:.6;transform:translate(-50%,60px) scaleX(1)}
-  50%{opacity:.25;transform:translate(-50%,60px) scaleX(.6)}
+  0%,100%{opacity:.6;transform:translateX(-50%) scaleX(1)}
+  50%{opacity:.25;transform:translateX(-50%) scaleX(.6)}
 }
 </style>
 </head>
@@ -130,7 +134,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 
 <video id="video" autoplay playsinline muted></video>
 <div id="glow-ring"></div>
-<canvas id="three-canvas"></canvas>
+<div id="canvas-wrap"><canvas id="three-canvas"></canvas></div>
 <div id="gesture-hint"></div>
 
 <div id="overlay">
@@ -141,8 +145,8 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 </div>
 
 <div id="err-panel">
-  <div style="font-size:52px;margin-bottom:16px">📵</div>
-  <div style="font-size:20px;font-weight:700;color:#ff6b6b;margin-bottom:10px">Камер нэвтрэх боломжгүй</div>
+  <div style="font-size:52px;margin-bottom:12px">📵</div>
+  <div style="font-size:18px;font-weight:700;color:#ff6b6b;margin-bottom:8px">Камер нэвтрэх боломжгүй</div>
   <div class="err-steps">
     <div class="err-step">1. Chrome дээрх <b>🔒 цоож</b> дарна уу</div>
     <div class="err-step">2. <b>Сайтын тохиргоо → Камер</b></div>
@@ -178,211 +182,258 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
 const MENU = [
-  {name:"Гоймон",   price:"₮12,000", desc:"Гоймон, өндөг, гүчүжан",              glb:"noodle.glb",  emoji:"🍜"},
-  {name:"Пицца",    price:"₮25,000", desc:"Хиам, бяслаг, гурил, BBQ соус",       glb:"pizza.glb",   emoji:"🍕"},
-  {name:"Бургер",   price:"₮18,000", desc:"Шарсан мах, помидор, бяслаг, байцаа", glb:"burger.glb",  emoji:"🍔"},
-  {name:"Хот дог",  price:"₮5,000",  desc:"Франкфурт, горчица",                  glb:"hotdog.glb",  emoji:"🌭"},
+  {name:"Гоймон",  price:"₮12,000", desc:"Гоймон, өндөг, гүчүжан",              glb:"noodle.glb", emoji:"🍜"},
+  {name:"Пицца",   price:"₮25,000", desc:"Хиам, бяслаг, гурил, BBQ соус",       glb:"pizza.glb",  emoji:"🍕"},
+  {name:"Бургер",  price:"₮18,000", desc:"Шарсан мах, помидор, бяслаг, байцаа", glb:"burger.glb", emoji:"🍔"},
+  {name:"Хот дог", price:"₮5,000",  desc:"Франкфурт, горчица",                  glb:"hotdog.glb", emoji:"🌭"},
 ];
 
 let renderer, scene, camera, clock;
 let currentModel = null;
 let activeIdx    = null;
-const loadedModels = {};
+const cache      = {};
 
-// ── Gesture state ──────────────────────────────────
-let modelRotY  = 0;   // current Y rotation (radians)
-let modelScale = 1.8; // current scale (Three.js units)
-const SCALE_MIN = 0.5;
-const SCALE_MAX = 5.0;
+// ── Rotation & scale state ──
+let rotX = 0.2,  rotY = 0;     // current rotation in radians
+let modelScale = 1.8;
+const SCALE_MIN = 0.4, SCALE_MAX = 8.0;
 
-// 1-finger drag
-let drag1 = null; // {x, rotY}
+// drag
+let drag = null;   // {x, y, rotX, rotY}
+let pinch = null;  // {dist, scale}
+let autoRotate   = true;
+let lastTouch    = 0;
+const RESUME_MS  = 2000;
 
-// 2-finger pinch
-let pinch = null; // {dist, scale}
+// ── Canvas size (responsive) ──
+let canvasSize = 320;
 
-// Auto-rotate when no touch
-let autoRotate  = true;
-let lastTouchTime = 0;
-const AUTO_RESUME_MS = 2000; // resume auto-rotate 2s after last touch
+function getCanvasSize() {
+  // Available height = screen - info panel (~100px) - bottom strip (~160px)
+  const avH = window.innerHeight - 100 - 160;
+  const avW = window.innerWidth;
+  return Math.floor(Math.min(avH, avW) * 0.92);
+}
 
-// ── Start ──────────────────────────────────────────
+function layoutCanvas() {
+  canvasSize = getCanvasSize();
+  const wrap   = document.getElementById('canvas-wrap');
+  const canvas = document.getElementById('three-canvas');
+  const bottom = document.getElementById('bottom');
+  const info   = document.getElementById('info');
+
+  // Bottom strip height
+  const bottomH = bottom.style.display === 'none' ? 0 : bottom.offsetHeight || 160;
+  // Info panel height
+  const infoH   = info.style.display   === 'none' ? 0 : info.offsetHeight   || 0;
+
+  const topOffset = infoH + (window.innerHeight - infoH - bottomH - canvasSize) / 2;
+
+  wrap.style.top    = Math.max(infoH, topOffset) + 'px';
+  wrap.style.height = canvasSize + 'px';
+
+  canvas.width  = canvasSize;
+  canvas.height = canvasSize;
+
+  if (renderer) {
+    renderer.setSize(canvasSize, canvasSize);
+    camera.aspect = 1;
+    camera.updateProjectionMatrix();
+  }
+
+  // Glow ring just below canvas
+  const ring = document.getElementById('glow-ring');
+  ring.style.top = (Math.max(infoH, topOffset) + canvasSize - 10) + 'px';
+
+  // Gesture hint just above canvas
+  document.getElementById('gesture-hint').style.top = (Math.max(infoH, topOffset) - 28) + 'px';
+}
+
+// ── Camera start ──────────────────────────────────
 async function startAR() {
   let stream;
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},
-      audio:false
-    });
-  } catch(e1) {
-    try { stream = await navigator.mediaDevices.getUserMedia({video:true,audio:false}); }
-    catch(e2) { document.getElementById('err-panel').style.display='flex'; return; }
+
+  // Try environment camera first, then any camera
+  const constraints = [
+    {video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false},
+    {video:{facingMode:'environment'}, audio:false},
+    {video:true, audio:false},
+  ];
+
+  for (const c of constraints) {
+    try { stream = await navigator.mediaDevices.getUserMedia(c); break; }
+    catch(e) { /* try next */ }
+  }
+
+  if (!stream) {
+    document.getElementById('err-panel').style.display = 'flex';
+    return;
   }
 
   const vid = document.getElementById('video');
   vid.srcObject = stream;
   vid.style.display = 'block';
-  await vid.play().catch(()=>{});
+
+  // Wait for video
+  await new Promise(res => {
+    vid.onloadedmetadata = () => vid.play().then(res).catch(res);
+    setTimeout(res, 3000); // fallback timeout
+  });
 
   document.getElementById('overlay').classList.add('hidden');
   initThree();
   buildStrip();
   document.getElementById('bottom').style.display = 'block';
 
-  // Preload all GLBs in background
+  // Layout after bottom strip shown
+  setTimeout(layoutCanvas, 50);
+
+  // Preload all GLBs
   MENU.forEach(item => loadGLB(item.glb, ()=>{}));
 }
 
-// ── Three.js ───────────────────────────────────────
+// ── Three.js ─────────────────────────────────────
 function initThree() {
+  canvasSize = getCanvasSize();
   const canvas = document.getElementById('three-canvas');
+  canvas.width  = canvasSize;
+  canvas.height = canvasSize;
+
   renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setClearColor(0,0);
-  renderer.setSize(320,320);
+  renderer.setSize(canvasSize, canvasSize);
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setClearColor(0, 0);
 
   scene  = new THREE.Scene();
   clock  = new THREE.Clock();
-  camera = new THREE.PerspectiveCamera(45,1,0.01,100);
-  camera.position.set(0,1.2,3.5);
-  camera.lookAt(0,0,0);
+  camera = new THREE.PerspectiveCamera(45, 1, 0.01, 100);
+  camera.position.set(0, 1.2, 3.5);
+  camera.lookAt(0, 0, 0);
 
-  scene.add(new THREE.AmbientLight(0xffffff,0.8));
-  const dir = new THREE.DirectionalLight(0xfff5e0,1.4);
-  dir.position.set(2,4,3); scene.add(dir);
-  const fill = new THREE.PointLight(0xe8a838,0.5,12);
-  fill.position.set(-2,2,1); scene.add(fill);
-  scene.add(new THREE.DirectionalLight(0xffffff,0.3)).position.set(0,-2,-3);
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const dir = new THREE.DirectionalLight(0xfff5e0, 1.4);
+  dir.position.set(2, 4, 3); scene.add(dir);
+  const fill = new THREE.PointLight(0xe8a838, 0.5, 12);
+  fill.position.set(-2, 2, 1); scene.add(fill);
+  const back = new THREE.DirectionalLight(0xffffff, 0.3);
+  back.position.set(0, -2, -3); scene.add(back);
 
-  // Touch events on canvas
-  canvas.addEventListener('touchstart', onTouchStart, {passive:false});
-  canvas.addEventListener('touchmove',  onTouchMove,  {passive:false});
-  canvas.addEventListener('touchend',   onTouchEnd,   {passive:false});
+  // Touch on canvas-wrap
+  const wrap = document.getElementById('canvas-wrap');
+  wrap.addEventListener('touchstart', onTS, {passive:false});
+  wrap.addEventListener('touchmove',  onTM, {passive:false});
+  wrap.addEventListener('touchend',   onTE, {passive:false});
 
-  window.addEventListener('resize',()=>{
-    renderer.setSize(320,320);
-    camera.updateProjectionMatrix();
-  });
+  window.addEventListener('resize', ()=>{ layoutCanvas(); });
 
   animate();
 }
 
 function animate() {
   requestAnimationFrame(animate);
-  if (!currentModel) { renderer && renderer.render(scene,camera); return; }
+  if (!currentModel) { renderer && renderer.render(scene, camera); return; }
 
-  const t = clock.getElapsedTime();
+  if (autoRotate) rotY += 0.008;
 
-  // Auto-rotate resumes after idle
-  if (autoRotate) {
-    modelRotY += 0.008;
-  }
-
-  currentModel.rotation.y = modelRotY;
-  currentModel.position.y = Math.sin(t * 1.1) * 0.06;
+  currentModel.rotation.x = rotX;
+  currentModel.rotation.y = rotY;
+  currentModel.position.y = Math.sin(clock.getElapsedTime() * 1.1) * 0.06;
 
   renderer.render(scene, camera);
 }
 
-// ── Touch handlers ─────────────────────────────────
-function onTouchStart(e) {
+// ── Touch handlers ────────────────────────────────
+function onTS(e) {
   e.preventDefault();
-  lastTouchTime = Date.now();
+  lastTouch  = Date.now();
   autoRotate = false;
 
   if (e.touches.length === 1) {
-    drag1 = {x: e.touches[0].clientX, rotY: modelRotY};
+    drag  = {x: e.touches[0].clientX, y: e.touches[0].clientY, rotX, rotY};
     pinch = null;
     showHint('☝️ Эргүүлэх');
   } else if (e.touches.length === 2) {
-    const d = touchDist(e.touches);
-    pinch = {dist: d, scale: modelScale};
-    drag1 = null;
+    pinch = {dist: tDist(e.touches), scale: modelScale};
+    drag  = null;
     showHint('🤏 Томруулах / жижигрүүлэх');
   }
 }
 
-function onTouchMove(e) {
+function onTM(e) {
   e.preventDefault();
-  lastTouchTime = Date.now();
+  lastTouch = Date.now();
 
-  if (e.touches.length === 1 && drag1) {
-    const dx = e.touches[0].clientX - drag1.x;
-    // 300px swipe = 2π rotation
-    modelRotY = drag1.rotY + (dx / 300) * Math.PI * 2;
-    if (currentModel) currentModel.rotation.y = modelRotY;
-
-  } else if (e.touches.length === 2 && pinch) {
-    const d = touchDist(e.touches);
-    const ratio = d / pinch.dist;
-    modelScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.scale * ratio));
+  if (e.touches.length === 1 && drag) {
+    const dx = e.touches[0].clientX - drag.x;
+    const dy = e.touches[0].clientY - drag.y;
+    // Horizontal → Y rotation, Vertical → X rotation
+    rotY = drag.rotY + (dx / canvasSize) * Math.PI * 2;
+    rotX = drag.rotX + (dy / canvasSize) * Math.PI * 1.5;
+    // Clamp X so model doesn't flip completely
+    rotX = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, rotX));
     if (currentModel) {
-      currentModel.scale.setScalar(modelScale);
+      currentModel.rotation.x = rotX;
+      currentModel.rotation.y = rotY;
     }
+  } else if (e.touches.length === 2 && pinch) {
+    const ratio = tDist(e.touches) / pinch.dist;
+    modelScale  = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.scale * ratio));
+    if (currentModel) currentModel.scale.setScalar(modelScale);
   }
 }
 
-function onTouchEnd(e) {
+function onTE(e) {
   e.preventDefault();
-  drag1 = null;
-  pinch = null;
+  drag = null; pinch = null;
   hideHint();
-
-  // Resume auto-rotate after 2s idle
-  setTimeout(()=>{
-    if (Date.now() - lastTouchTime >= AUTO_RESUME_MS) {
-      autoRotate = true;
-    }
-  }, AUTO_RESUME_MS);
+  setTimeout(() => {
+    if (Date.now() - lastTouch >= RESUME_MS) autoRotate = true;
+  }, RESUME_MS);
 }
 
-function touchDist(touches) {
-  const dx = touches[0].clientX - touches[1].clientX;
-  const dy = touches[0].clientY - touches[1].clientY;
+function tDist(t) {
+  const dx = t[0].clientX - t[1].clientX;
+  const dy = t[0].clientY - t[1].clientY;
   return Math.sqrt(dx*dx + dy*dy);
 }
 
-// ── Hint label ─────────────────────────────────────
+// ── Hint ──────────────────────────────────────────
 let hintTimer;
 function showHint(msg) {
   const el = document.getElementById('gesture-hint');
-  const canvas = document.getElementById('three-canvas');
-  const rect = canvas.getBoundingClientRect();
   el.textContent = msg;
-  el.style.top  = (rect.top - 32) + 'px';
   el.style.display = 'block';
   clearTimeout(hintTimer);
 }
 function hideHint() {
-  hintTimer = setTimeout(()=>{
-    document.getElementById('gesture-hint').style.display='none';
-  }, 800);
+  hintTimer = setTimeout(() => {
+    document.getElementById('gesture-hint').style.display = 'none';
+  }, 900);
 }
 
-// ── GLB loader ─────────────────────────────────────
-function loadGLB(glbFile, onDone) {
-  if (loadedModels[glbFile]) { onDone(loadedModels[glbFile]); return; }
-  new THREE.GLTFLoader().load(glbFile, gltf => {
-    const model = gltf.scene;
-    const box   = new THREE.Box3().setFromObject(model);
-    const size  = box.getSize(new THREE.Vector3());
-    const maxDim = Math.max(size.x, size.y, size.z);
-    const sc = 1.8 / maxDim;
-    model.scale.setScalar(sc);
-    const center = box.getCenter(new THREE.Vector3());
-    model.position.set(-center.x*sc, -center.y*sc, -center.z*sc);
-    loadedModels[glbFile] = model;
-    onDone(model);
-  }, undefined, err => { console.warn(err); onDone(null); });
+// ── GLB loader ────────────────────────────────────
+function loadGLB(file, cb) {
+  if (cache[file]) { cb(cache[file]); return; }
+  new THREE.GLTFLoader().load(file, gltf => {
+    const m   = gltf.scene;
+    const box = new THREE.Box3().setFromObject(m);
+    const mx  = Math.max(...box.getSize(new THREE.Vector3()).toArray());
+    const sc  = 1.8 / mx;
+    m.scale.setScalar(sc);
+    const c = box.getCenter(new THREE.Vector3());
+    m.position.set(-c.x*sc, -c.y*sc, -c.z*sc);
+    cache[file] = m;
+    cb(m);
+  }, undefined, err => { console.warn(err); cb(null); });
 }
 
-// ── Select / close ─────────────────────────────────
+// ── Select / show / close ─────────────────────────
 function selectItem(idx) {
   if (activeIdx === idx) { closeInfo(); return; }
   activeIdx = idx;
   const item = MENU[idx];
 
-  document.querySelectorAll('.strip-card').forEach((el,i) => el.classList.toggle('active',i===idx));
+  document.querySelectorAll('.strip-card').forEach((el,i) => el.classList.toggle('active', i===idx));
   document.getElementById('iEmoji').textContent = item.emoji;
   document.getElementById('iName').textContent  = item.name;
   document.getElementById('iDesc').textContent  = item.desc;
@@ -394,12 +445,12 @@ function selectItem(idx) {
 
 function showModel(item) {
   if (currentModel) { scene.remove(currentModel); currentModel = null; }
-  document.getElementById('three-canvas').style.display = 'none';
-  document.getElementById('glow-ring').style.display    = 'none';
+  document.getElementById('canvas-wrap').style.display = 'none';
+  document.getElementById('glow-ring').style.display   = 'none';
 
-  if (!loadedModels[item.glb]) {
-    document.getElementById('loading').style.display    = 'flex';
-    document.getElementById('loading-txt').textContent  = item.name + ' ачааллаж байна...';
+  if (!cache[item.glb]) {
+    document.getElementById('loading').style.display   = 'flex';
+    document.getElementById('loading-txt').textContent = item.name + ' ачааллаж байна...';
   }
 
   loadGLB(item.glb, model => {
@@ -407,33 +458,31 @@ function showModel(item) {
     if (!model) return;
 
     const clone = model.clone();
-    // Reset gesture state for new model
-    modelRotY  = 0;
-    modelScale = 1.8;
-    autoRotate = true;
+    rotX = 0.15; rotY = 0; modelScale = 1.8; autoRotate = true;
     clone.scale.setScalar(modelScale);
     scene.add(clone);
     currentModel = clone;
 
-    document.getElementById('three-canvas').style.display = 'block';
-    document.getElementById('glow-ring').style.display    = 'block';
+    document.getElementById('canvas-wrap').style.display = 'flex';
+    document.getElementById('glow-ring').style.display   = 'block';
+    layoutCanvas();
   });
 }
 
 function closeInfo() {
   activeIdx = null;
-  document.getElementById('info').style.display         = 'none';
-  document.getElementById('three-canvas').style.display = 'none';
-  document.getElementById('glow-ring').style.display    = 'none';
+  document.getElementById('info').style.display        = 'none';
+  document.getElementById('canvas-wrap').style.display = 'none';
+  document.getElementById('glow-ring').style.display   = 'none';
   document.querySelectorAll('.strip-card').forEach(el => el.classList.remove('active'));
   if (currentModel) { scene.remove(currentModel); currentModel = null; }
 }
 
-// ── Strip ──────────────────────────────────────────
+// ── Strip ─────────────────────────────────────────
 function buildStrip() {
   const strip = document.getElementById('strip');
   strip.innerHTML = '';
-  MENU.forEach((item,i) => {
+  MENU.forEach((item, i) => {
     const div = document.createElement('div');
     div.className = 'strip-card';
     div.innerHTML = `<div class="strip-emoji">${item.emoji}</div><div class="strip-name">${item.name}</div><div class="strip-price">${item.price}</div>`;
