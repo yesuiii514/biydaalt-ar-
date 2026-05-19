@@ -1,20 +1,198 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AR Menu FIX</title>
+
+<style>
+html,body{margin:0;padding:0;overflow:hidden;background:#000;font-family:sans-serif}
+
+/* AR canvas */
+canvas{position:fixed;inset:0;z-index:1}
+
+/* overlay */
+#overlay{
+  position:fixed;inset:0;z-index:10;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:linear-gradient(160deg,#0d0d0d,#1a1200);
+  color:#fff;text-align:center;padding:20px;
+}
+
+.start-btn{
+  margin-top:20px;
+  padding:14px 40px;
+  border:none;
+  border-radius:30px;
+  background:#e8a838;
+  font-weight:bold;
+}
+
+/* bottom */
+#bottom{
+  position:fixed;bottom:0;left:0;right:0;z-index:20;
+  padding:10px;
+}
+.card{
+  background:#111;color:#fff;
+  padding:10px;border-radius:10px;
+  margin-right:10px;display:inline-block;
+}
+</style>
+</head>
+
+<body>
+
+<div id="overlay">
+  <h1>🍜 AR MENU</h1>
+  <button class="start-btn" id="startBtn">AR эхлүүлэх</button>
+</div>
+
+<div id="bottom"></div>
+
 <script type="module">
+
 import * as THREE from "https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.module.js";
+import { GLTFLoader } from "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/loaders/GLTFLoader.js";
 import { ARButton } from "https://cdn.jsdelivr.net/npm/three@0.128.0/examples/jsm/webxr/ARButton.js";
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera();
-const renderer = new THREE.WebGLRenderer({alpha:true});
+const MENU = [
+  {name:"Гоймон", glb:"noodle.glb"},
+  {name:"Пицца", glb:"pizza.glb"},
+  {name:"Бургер", glb:"burger.glb"}
+];
 
-renderer.setSize(innerWidth, innerHeight);
-renderer.xr.enabled = true;
-document.body.appendChild(renderer.domElement);
+let scene, camera, renderer;
+let loader;
+let currentModel = null;
 
-document.body.appendChild(
-  ARButton.createButton(renderer, { requiredFeatures: ['hit-test'] })
-);
+let reticle;
+let hitTestSource = null;
+let hitTestSourceRequested = false;
 
-renderer.setAnimationLoop(() => {
-  renderer.render(scene, camera);
+document.getElementById("startBtn").onclick = init;
+
+function init(){
+
+  document.getElementById("overlay").style.display="none";
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(70, innerWidth/innerHeight, 0.01, 20);
+
+  renderer = new THREE.WebGLRenderer({alpha:true, antialias:true});
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.xr.enabled = true;
+  document.body.appendChild(renderer.domElement);
+
+  // 🔥 AR BUTTON (fixed)
+  document.body.appendChild(
+    ARButton.createButton(renderer, {
+      requiredFeatures: ['hit-test']
+    })
+  );
+
+  // LIGHT (MUST)
+  scene.add(new THREE.HemisphereLight(0xffffff, 0x444444, 1.5));
+
+  const dir = new THREE.DirectionalLight(0xffffff, 1);
+  dir.position.set(2,5,2);
+  scene.add(dir);
+
+  loader = new GLTFLoader();
+
+  // RETICLE (table marker)
+  reticle = new THREE.Mesh(
+    new THREE.RingGeometry(0.1, 0.12, 32).rotateX(-Math.PI/2),
+    new THREE.MeshBasicMaterial({color:0xe8a838})
+  );
+  reticle.matrixAutoUpdate = false;
+  reticle.visible = false;
+  scene.add(reticle);
+
+  buildMenu();
+
+  renderer.setAnimationLoop(render);
+}
+
+function buildMenu(){
+  const bottom = document.getElementById("bottom");
+  MENU.forEach((m,i)=>{
+    const d = document.createElement("div");
+    d.className="card";
+    d.innerText=m.name;
+    d.onclick=()=>loadModel(m.glb);
+    bottom.appendChild(d);
+  });
+}
+
+function loadModel(path){
+
+  loader.load(path,(gltf)=>{
+    currentModel = gltf.scene;
+    currentModel.scale.set(1,1,1);
+  });
+
+}
+
+function render(timestamp, frame){
+
+  if(frame){
+
+    const session = renderer.xr.getSession();
+    const referenceSpace = renderer.xr.getReferenceSpace();
+
+    if(!hitTestSourceRequested){
+
+      session.requestReferenceSpace("viewer").then(space=>{
+        session.requestHitTestSource({space}).then(source=>{
+          hitTestSource = source;
+        });
+      });
+
+      session.addEventListener("end",()=>{
+        hitTestSourceRequested=false;
+        hitTestSource=null;
+      });
+
+      hitTestSourceRequested=true;
+    }
+
+    if(hitTestSource){
+
+      const hits = frame.getHitTestResults(hitTestSource);
+
+      if(hits.length){
+
+        const pose = hits[0].getPose(referenceSpace);
+
+        reticle.visible = true;
+        reticle.matrix.fromArray(pose.transform.matrix);
+
+      } else {
+        reticle.visible = false;
+      }
+    }
+  }
+
+  renderer.render(scene,camera);
+}
+
+// TAP → place model on table
+window.addEventListener("click",()=>{
+
+  if(!reticle.visible || !currentModel) return;
+
+  const clone = currentModel.clone();
+
+  clone.position.setFromMatrixPosition(reticle.matrix);
+  clone.quaternion.setFromRotationMatrix(reticle.matrix);
+
+  scene.add(clone);
+
 });
+
 </script>
+</body>
+</html>
