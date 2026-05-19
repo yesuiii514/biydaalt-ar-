@@ -8,48 +8,24 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Segoe UI',sans-serif}
 
-/* VIDEO — full screen */
-#video{
-  position:fixed;inset:0;width:100%;height:100%;
-  object-fit:cover;z-index:0;display:none;
-}
+#video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none}
+#three-canvas{position:fixed;inset:0;width:100%!important;height:100%!important;z-index:5;display:none;touch-action:none}
 
 /* OVERLAY */
-#overlay{
-  position:fixed;inset:0;z-index:50;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;
-  background:linear-gradient(160deg,#0d0d0d,#1a1200);
-  color:#fff;padding:32px;
-}
+#overlay{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0d0d0d,#1a1200);color:#fff;padding:32px}
 #overlay.hidden{display:none}
 .logo-big{font-size:64px;margin-bottom:16px;animation:floatY 3s ease-in-out infinite}
 @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .ov-title{font-size:28px;font-weight:700;letter-spacing:3px;margin-bottom:10px}
 .ov-sub{font-size:14px;color:rgba(255,255,255,.5);text-align:center;line-height:1.7;margin-bottom:40px}
-.start-btn{
-  background:#e8a838;color:#000;border:none;border-radius:50px;
-  padding:16px 44px;font-size:17px;font-weight:700;cursor:pointer;
-  box-shadow:0 0 32px rgba(232,168,56,.5);
-  -webkit-appearance:none;appearance:none;
-}
+.start-btn{background:#e8a838;color:#000;border:none;border-radius:50px;padding:16px 44px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 0 32px rgba(232,168,56,.5);-webkit-appearance:none}
 
-/* LOADING */
-#loading{
-  position:fixed;inset:0;z-index:55;display:none;
-  align-items:center;justify-content:center;
-  flex-direction:column;gap:16px;
-  background:rgba(0,0,0,.85);
-}
+#loading{position:fixed;inset:0;z-index:55;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:rgba(0,0,0,.8)}
 .spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.15);border-top-color:#e8a838;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #load-msg{font-size:14px;color:rgba(255,255,255,.7);text-align:center;padding:0 24px}
 
-/* ERR */
-#err-panel{
-  position:fixed;inset:0;z-index:60;display:none;
-  flex-direction:column;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.96);color:#fff;padding:32px;text-align:center;
-}
+#err-panel{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;background:rgba(0,0,0,.96);color:#fff;padding:32px;text-align:center}
 #err-detail{font-size:12px;color:#ff8a65;margin:8px 0 16px;word-break:break-all;max-width:320px}
 .err-steps{background:rgba(255,255,255,.06);border-radius:16px;padding:16px 20px;text-align:left;width:100%;max-width:340px;margin-bottom:20px}
 .err-step{font-size:13px;color:rgba(255,255,255,.75);padding:7px 0;border-bottom:.5px solid rgba(255,255,255,.08);line-height:1.5}
@@ -57,62 +33,55 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .err-step b{color:#e8a838}
 .retry-btn{background:#e8a838;color:#000;border:none;border-radius:50px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer;-webkit-appearance:none}
 
-/* INFO panel */
-#info{
-  position:fixed;top:0;left:0;right:0;z-index:40;
-  background:rgba(10,10,10,.93);
-  border-bottom:.5px solid rgba(232,168,56,.3);
-  padding:16px 52px 16px 20px;display:none;
-  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
-}
+/* INFO */
+#info{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(10,10,10,.93);border-bottom:.5px solid rgba(232,168,56,.3);padding:16px 52px 16px 20px;display:none;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .info-row{display:flex;align-items:center;gap:16px}
 .info-emoji{font-size:50px;flex-shrink:0}
 .info-name{font-size:19px;font-weight:700;color:#fff;margin-bottom:3px}
 .info-desc{font-size:13px;color:rgba(255,255,255,.5);margin-bottom:5px}
 .info-price{font-size:22px;font-weight:800;color:#e8a838}
-.info-close{
-  position:absolute;top:14px;right:14px;
-  background:rgba(255,255,255,.1);border:none;color:#fff;
-  width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
+.info-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
+
+/* RETICLE — surface indicator */
+#reticle{
+  position:fixed;z-index:15;pointer-events:none;display:none;
+  transform:translate(-50%,-50%);
+}
+.reticle-ring{
+  width:70px;height:22px;
+  border:2px solid rgba(232,168,56,.9);
+  border-radius:50%;
+  box-shadow:0 0 12px rgba(232,168,56,.6),inset 0 0 8px rgba(232,168,56,.2);
+  animation:retPulse 1.4s ease-in-out infinite;
+}
+@keyframes retPulse{0%,100%{opacity:1;transform:scaleX(1)}50%{opacity:.5;transform:scaleX(1.15)}}
+.reticle-dot{width:5px;height:5px;background:#e8a838;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+
+/* PLACE button */
+#place-btn{
+  position:fixed;z-index:40;display:none;
+  left:50%;transform:translateX(-50%);
+  background:#e8a838;color:#000;border:none;border-radius:50px;
+  padding:13px 28px;font-size:15px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 24px rgba(232,168,56,.5);white-space:nowrap;
+  -webkit-appearance:none;
 }
 
-/* 3D canvas — full screen, on top of video */
-#three-canvas{
-  position:fixed;inset:0;
-  width:100% !important;height:100% !important;
-  z-index:10;display:none;
-  touch-action:none;
-}
-
-/* gesture hint */
-#ghint{
-  position:fixed;bottom:175px;left:50%;transform:translateX(-50%);
-  z-index:41;pointer-events:none;display:none;
+/* MODE hint */
+#mode-hint{
+  position:fixed;left:50%;transform:translateX(-50%);
+  z-index:41;pointer-events:none;
   background:rgba(0,0,0,.6);border-radius:20px;
-  padding:5px 16px;font-size:12px;color:rgba(255,255,255,.7);
-  white-space:nowrap;
+  padding:5px 16px;font-size:12px;color:rgba(255,255,255,.75);
+  white-space:nowrap;display:none;
 }
 
 /* BOTTOM */
-#bottom{
-  position:fixed;bottom:0;left:0;right:0;z-index:40;
-  padding:0 12px 28px;display:none;
-}
-.hint-txt{
-  text-align:center;color:rgba(255,255,255,.55);font-size:12px;
-  margin-bottom:10px;background:rgba(0,0,0,.6);border-radius:20px;
-  padding:5px 14px;display:inline-block;width:100%;
-}
+#bottom{position:fixed;bottom:0;left:0;right:0;z-index:40;padding:0 12px 28px;display:none}
+.hint-txt{text-align:center;color:rgba(255,255,255,.55);font-size:12px;margin-bottom:10px;background:rgba(0,0,0,.6);border-radius:20px;padding:5px 14px;display:inline-block;width:100%}
 .scroll-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
 .scroll-strip::-webkit-scrollbar{display:none}
-.strip-card{
-  min-width:112px;flex-shrink:0;
-  background:rgba(15,15,15,.92);border:.5px solid rgba(255,255,255,.12);
-  border-radius:16px;padding:12px 10px;cursor:pointer;
-  transition:border-color .2s,transform .15s;
-  backdrop-filter:blur(8px);text-align:center;
-}
+.strip-card{min-width:112px;flex-shrink:0;background:rgba(15,15,15,.92);border:.5px solid rgba(255,255,255,.12);border-radius:16px;padding:12px 10px;cursor:pointer;transition:border-color .2s,transform .15s;backdrop-filter:blur(8px);text-align:center}
 .strip-card.active{border-color:#e8a838;box-shadow:0 0 14px rgba(232,168,56,.35)}
 .strip-card:active{transform:scale(.96)}
 .strip-emoji{font-size:28px;margin-bottom:5px}
@@ -124,19 +93,19 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 
 <video id="video" autoplay playsinline muted></video>
 <canvas id="three-canvas"></canvas>
-<div id="ghint"></div>
+
+<div id="reticle"><div class="reticle-ring"></div><div class="reticle-dot"></div></div>
+<div id="mode-hint"></div>
+<button id="place-btn">📍 Энд тавих</button>
 
 <div id="overlay">
   <div class="logo-big">🍜</div>
   <div class="ov-title">AR МЕНЮ</div>
-  <div class="ov-sub">Доороос хоол сонгоход<br>камер дээр 3D загвар харагдана</div>
+  <div class="ov-sub">Хоол сонгоод ширээн дээр<br>хүссэн газраа тавина уу</div>
   <button class="start-btn" id="startBtn">📷 Камер нээх</button>
 </div>
 
-<div id="loading">
-  <div class="spinner"></div>
-  <div id="load-msg">Камер нээж байна...</div>
-</div>
+<div id="loading"><div class="spinner"></div><div id="load-msg">Камер нээж байна...</div></div>
 
 <div id="err-panel">
   <div style="font-size:52px;margin-bottom:12px">📵</div>
@@ -164,7 +133,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 </div>
 
 <div id="bottom">
-  <div class="hint-txt">👇 Хоол сонгоход 3D загвар харагдана</div>
+  <div class="hint-txt" id="bottom-hint">👇 Хоол сонгоно уу</div>
   <div class="scroll-strip" id="strip"></div>
 </div>
 
@@ -178,45 +147,50 @@ const MENU = [
   {name:"Хот дог", price:"₮5,000",  desc:"Франкфурт, горчица",                  glb:"hotdog.glb", emoji:"🌭"},
 ];
 
+// ── State ──
 let renderer, scene, camera, clock;
-let currentModel = null, activeIdx = null;
+let activeIdx = null;
 const cache = {};
 
+// Mode: 'preview' (floating center) or 'place' (on surface)
+let mode = 'preview';
+
+// Preview model (floating, user can rotate/zoom)
+let previewModel = null;
 let rotX = 0.15, rotY = 0, modelScale = 0.5;
 const SCALE_MIN = 0.1, SCALE_MAX = 10;
 let drag = null, pinch = null, autoRotate = true, lastTouch = 0;
 
-// ── BUTTON ───────────────────────────────────────
+// Placed models on "surface"
+let placedModels = []; // {mesh, x, z} in 3D world
+
+// Reticle world position
+let reticlePos = new THREE.Vector3(0, 0, -1.5);
+
+// Camera tilt tracking for surface detection
+let floorY = -1.0; // estimated floor Y in world space
+
+// ── Init ──
 document.getElementById('startBtn').addEventListener('click', startAR);
+document.getElementById('place-btn').addEventListener('click', placeModel);
 
 async function startAR() {
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('loading').style.display = 'flex';
-  document.getElementById('load-msg').textContent  = 'Камер нээж байна...';
 
-  let stream = null;
-  let lastErr = null;
-
-  // Try multiple constraint sets — most permissive last
-  const tries = [
+  let stream = null, lastErr = null;
+  for (const c of [
     {video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false},
-    {video:{facingMode:{ideal:'environment'}}, audio:false},
-    {video:{facingMode:'user'}, audio:false},
-    {video:true, audio:false},
-  ];
-
-  for (const c of tries) {
-    try {
-      stream = await navigator.mediaDevices.getUserMedia(c);
-      break;
-    } catch(e) {
-      lastErr = e;
-    }
+    {video:{facingMode:{ideal:'environment'}},audio:false},
+    {video:true,audio:false},
+  ]) {
+    try { stream = await navigator.mediaDevices.getUserMedia(c); break; }
+    catch(e) { lastErr = e; }
   }
 
   if (!stream) {
     document.getElementById('loading').style.display = 'none';
-    document.getElementById('err-detail').textContent = lastErr ? (lastErr.name + ': ' + lastErr.message) : 'Тодорхойгүй алдаа';
+    document.getElementById('err-detail').textContent = lastErr ? lastErr.name+': '+lastErr.message : '';
     document.getElementById('err-panel').style.display = 'flex';
     return;
   }
@@ -224,17 +198,12 @@ async function startAR() {
   const vid = document.getElementById('video');
   vid.srcObject = stream;
   vid.style.display = 'block';
+  try { await vid.play(); } catch(e) { vid.oncanplay = ()=>vid.play().catch(()=>{}); }
 
-  // Robust play
-  try { await vid.play(); } catch(e) {
-    vid.oncanplay = () => vid.play().catch(()=>{});
-  }
-
-  // Wait up to 2s for video to have dimensions
   await new Promise(res => {
-    if (vid.videoWidth > 0) { res(); return; }
+    if (vid.videoWidth > 0) return res();
     const t = setTimeout(res, 2000);
-    vid.addEventListener('loadedmetadata', () => { clearTimeout(t); res(); }, {once:true});
+    vid.addEventListener('loadedmetadata', ()=>{ clearTimeout(t); res(); }, {once:true});
   });
 
   document.getElementById('loading').style.display = 'none';
@@ -244,7 +213,7 @@ async function startAR() {
   MENU.forEach(item => loadGLB(item.glb, ()=>{}));
 }
 
-// ── THREE ─────────────────────────────────────────
+// ── Three.js ──
 function initThree() {
   const canvas = document.getElementById('three-canvas');
   const W = window.innerWidth, H = window.innerHeight;
@@ -252,85 +221,207 @@ function initThree() {
   renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
   renderer.setSize(W, H);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setClearColor(0, 0);
 
-  scene  = new THREE.Scene();
-  clock  = new THREE.Clock();
-  camera = new THREE.PerspectiveCamera(45, W/H, 0.01, 100);
-  camera.position.set(0, 1.2, 3.5);
-  camera.lookAt(0, 0, 0);
+  scene = new THREE.Scene();
+  clock = new THREE.Clock();
 
-  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-  const dir = new THREE.DirectionalLight(0xfff5e0, 1.4);
-  dir.position.set(2,4,3); scene.add(dir);
-  const fill = new THREE.PointLight(0xe8a838, 0.5, 12);
-  fill.position.set(-2,2,1); scene.add(fill);
-  const back = new THREE.DirectionalLight(0xffffff, 0.3);
-  back.position.set(0,-2,-3); scene.add(back);
+  // Perspective camera simulating phone held at ~chest height
+  camera = new THREE.PerspectiveCamera(60, W/H, 0.01, 50);
+  camera.position.set(0, 1.4, 0); // eye height ~1.4m
+  camera.rotation.x = -0.4;       // tilted down ~23deg toward table
 
+  // Lights
+  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+  const sun = new THREE.DirectionalLight(0xfff5e0, 1.2);
+  sun.position.set(2, 5, 3);
+  sun.castShadow = true;
+  sun.shadow.mapSize.width = 512;
+  sun.shadow.mapSize.height = 512;
+  sun.shadow.camera.near = 0.1;
+  sun.shadow.camera.far = 20;
+  sun.shadow.camera.left = -3;
+  sun.shadow.camera.right = 3;
+  sun.shadow.camera.top = 3;
+  sun.shadow.camera.bottom = -3;
+  scene.add(sun);
+  const fill = new THREE.PointLight(0xe8a838, 0.4, 10);
+  fill.position.set(-2, 2, 1); scene.add(fill);
+
+  // Invisible floor plane for shadow
+  const floorGeo = new THREE.PlaneGeometry(20, 20);
+  const floorMat = new THREE.ShadowMaterial({opacity:0.35});
+  const floor = new THREE.Mesh(floorGeo, floorMat);
+  floor.rotation.x = -Math.PI/2;
+  floor.position.y = floorY;
+  floor.receiveShadow = true;
+  scene.add(floor);
+
+  // Touch events
   canvas.addEventListener('touchstart', onTS, {passive:false});
   canvas.addEventListener('touchmove',  onTM, {passive:false});
   canvas.addEventListener('touchend',   onTE, {passive:false});
 
-  window.addEventListener('resize', () => {
-    const W = window.innerWidth, H = window.innerHeight;
-    renderer.setSize(W, H);
-    camera.aspect = W/H;
+  window.addEventListener('resize', ()=>{
+    const W=window.innerWidth, H=window.innerHeight;
+    renderer.setSize(W,H);
+    camera.aspect=W/H;
     camera.updateProjectionMatrix();
   });
 
-  canvas.style.display = 'none'; // hidden until model loaded
+  canvas.style.display = 'block';
   animate();
 }
 
 function animate() {
   requestAnimationFrame(animate);
-  if (!currentModel || !renderer) return;
-  if (autoRotate) rotY += 0.008;
-  currentModel.rotation.x = rotX;
-  currentModel.rotation.y = rotY;
-  currentModel.position.y = Math.sin(clock.getElapsedTime() * 1.1) * 0.06;
+  if (!renderer) return;
+  const t = clock.getElapsedTime();
+
+  if (mode === 'preview' && previewModel) {
+    if (autoRotate) rotY += 0.008;
+    previewModel.rotation.x = rotX;
+    previewModel.rotation.y = rotY;
+    previewModel.position.y = floorY + modelScale*0.5 + Math.sin(t*1.2)*0.05*modelScale;
+  }
+
+  // Animate placed models (slow rotate)
+  placedModels.forEach(p => {
+    p.mesh.rotation.y = t * 0.4 + p.rotOff;
+  });
+
+  // Pulse reticle
+  const ret = document.getElementById('reticle');
+  if (ret.style.display !== 'none') {
+    // Project reticle world pos to screen
+    const projected = reticlePos.clone().project(camera);
+    const sx = ( projected.x * 0.5 + 0.5) * window.innerWidth;
+    const sy = (-projected.y * 0.5 + 0.5) * window.innerHeight;
+    ret.style.left = sx + 'px';
+    ret.style.top  = sy + 'px';
+  }
+
   renderer.render(scene, camera);
 }
 
-// ── TOUCH ─────────────────────────────────────────
+// ── Touch ──
 function onTS(e) {
-  e.preventDefault(); lastTouch = Date.now(); autoRotate = false;
+  e.preventDefault();
+  lastTouch = Date.now();
+  autoRotate = false;
+
+  if (mode === 'surface') {
+    // In surface mode: 1 finger moves reticle, 2 finger pinch scales preview
+    if (e.touches.length === 1) {
+      drag = {x: e.touches[0].clientX, y: e.touches[0].clientY, rx: reticlePos.x, rz: reticlePos.z};
+      showHint('☝️ Байрлал зөрүүлэх');
+    } else if (e.touches.length === 2) {
+      pinch = {dist: tDist(e.touches), scale: modelScale};
+      showHint('🤏 Томруулах');
+    }
+    return;
+  }
+
+  // Preview mode: rotate / pinch zoom
   if (e.touches.length === 1) {
-    drag  = {x:e.touches[0].clientX, y:e.touches[0].clientY, rotX, rotY};
-    pinch = null; showHint('☝️ Эргүүлэх');
+    drag = {x: e.touches[0].clientX, y: e.touches[0].clientY, rotX, rotY};
+    showHint('☝️ Эргүүлэх');
   } else if (e.touches.length === 2) {
-    pinch = {dist:tDist(e.touches), scale:modelScale};
-    drag  = null; showHint('🤏 Томруулах / жижигрүүлэх');
+    pinch = {dist: tDist(e.touches), scale: modelScale};
+    showHint('🤏 Томруулах / жижигрүүлэх');
   }
 }
+
 function onTM(e) {
-  e.preventDefault(); lastTouch = Date.now();
+  e.preventDefault();
+  lastTouch = Date.now();
+
+  if (mode === 'surface') {
+    if (e.touches.length === 1 && drag) {
+      // Move reticle along floor plane
+      const dx = (e.touches[0].clientX - drag.x) / window.innerWidth  *  3;
+      const dz = (e.touches[0].clientY - drag.y) / window.innerHeight * -2;
+      reticlePos.x = drag.rx + dx;
+      reticlePos.z = drag.rz - dz;
+      reticlePos.y = floorY;
+      // Move preview model with reticle
+      if (previewModel) {
+        previewModel.position.x = reticlePos.x;
+        previewModel.position.z = reticlePos.z;
+      }
+    } else if (e.touches.length === 2 && pinch) {
+      modelScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.scale * tDist(e.touches)/pinch.dist));
+      if (previewModel) previewModel.scale.setScalar(modelScale);
+    }
+    return;
+  }
+
+  // Preview mode
   if (e.touches.length === 1 && drag) {
     const dx = e.touches[0].clientX - drag.x;
     const dy = e.touches[0].clientY - drag.y;
-    rotY = drag.rotY + (dx / window.innerWidth)  * Math.PI * 2;
-    rotX = drag.rotX + (dy / window.innerHeight) * Math.PI * 1.5;
+    rotY = drag.rotY + (dx/window.innerWidth)  * Math.PI * 2;
+    rotX = drag.rotX + (dy/window.innerHeight) * Math.PI * 1.5;
     rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
-    if (currentModel) { currentModel.rotation.x=rotX; currentModel.rotation.y=rotY; }
+    if (previewModel) { previewModel.rotation.x=rotX; previewModel.rotation.y=rotY; }
   } else if (e.touches.length === 2 && pinch) {
-    modelScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.scale * tDist(e.touches) / pinch.dist));
-    if (currentModel) currentModel.scale.setScalar(modelScale);
+    modelScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.scale * tDist(e.touches)/pinch.dist));
+    if (previewModel) previewModel.scale.setScalar(modelScale);
   }
 }
+
 function onTE(e) {
-  e.preventDefault(); drag=null; pinch=null; hideHint();
+  e.preventDefault();
+  drag = null; pinch = null; hideHint();
   setTimeout(()=>{ if(Date.now()-lastTouch>=2000) autoRotate=true; }, 2000);
 }
-function tDist(t) {
-  return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY);
+
+function tDist(t) { return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
+
+// ── Mode switch: preview → surface ──
+function switchToSurface() {
+  if (!previewModel) return;
+  mode = 'surface';
+  autoRotate = false;
+
+  // Place preview model at initial reticle position on floor
+  reticlePos.set(0, floorY, -1.5);
+  previewModel.position.set(reticlePos.x, floorY + modelScale*0.5, reticlePos.z);
+  previewModel.rotation.x = 0;
+  previewModel.rotation.y = 0;
+  previewModel.castShadow = true;
+
+  document.getElementById('reticle').style.display   = 'block';
+  document.getElementById('place-btn').style.display = 'block';
+  document.getElementById('place-btn').style.bottom  = '175px';
+  document.getElementById('bottom-hint').textContent = '👆 Drag хийж байрлуулаад тавина уу';
+  showHint('☝️ Хуруугаар байрлал зөрүүлнэ үү');
 }
 
-let hTimer;
-function showHint(m){ const el=document.getElementById('ghint'); el.textContent=m; el.style.display='block'; clearTimeout(hTimer); }
-function hideHint(){ hTimer=setTimeout(()=>{ document.getElementById('ghint').style.display='none'; },900); }
+// ── Place model ──
+function placeModel() {
+  if (!previewModel || mode !== 'surface') return;
+  if (navigator.vibrate) navigator.vibrate(60);
 
-// ── GLB ───────────────────────────────────────────
+  // Clone and keep placed
+  const clone = previewModel.clone();
+  clone.position.copy(previewModel.position);
+  clone.scale.copy(previewModel.scale);
+  clone.rotation.set(0, Math.random()*Math.PI*2, 0);
+  clone.castShadow = true;
+  scene.add(clone);
+  placedModels.push({mesh: clone, rotOff: Math.random()*Math.PI*2});
+
+  // Reset to preview mode for next interaction
+  document.getElementById('reticle').style.display   = 'none';
+  document.getElementById('place-btn').style.display = 'none';
+  document.getElementById('bottom-hint').textContent = '✅ Тавигдлаа! Дахин тавихыг хүсвэл "Ширээнд тавих" дарна уу';
+  mode = 'preview';
+}
+
+// ── GLB ──
 function loadGLB(file, cb) {
   if (cache[file]) { cb(cache[file]); return; }
   new THREE.GLTFLoader().load(file, gltf => {
@@ -341,62 +432,98 @@ function loadGLB(file, cb) {
     m.scale.setScalar(sc);
     const c = box.getCenter(new THREE.Vector3());
     m.position.set(-c.x*sc, -c.y*sc, -c.z*sc);
+    // Enable shadows
+    m.traverse(n => { if(n.isMesh){ n.castShadow=true; n.receiveShadow=true; } });
     cache[file] = m;
     cb(m);
-  }, undefined, err => { console.warn(err); cb(null); });
+  }, undefined, err=>{ console.warn(err); cb(null); });
 }
 
-// ── SELECT ────────────────────────────────────────
+// ── Select ──
 function selectItem(idx) {
   if (activeIdx === idx) { closeInfo(); return; }
   activeIdx = idx;
   const item = MENU[idx];
+
   document.querySelectorAll('.strip-card').forEach((el,i)=>el.classList.toggle('active',i===idx));
   document.getElementById('iEmoji').textContent = item.emoji;
   document.getElementById('iName').textContent  = item.name;
   document.getElementById('iDesc').textContent  = item.desc;
   document.getElementById('iPrice').textContent = item.price;
   document.getElementById('info').style.display = 'block';
-  showModel(item);
-}
 
-function showModel(item) {
-  if (currentModel) { scene.remove(currentModel); currentModel=null; }
-  document.getElementById('three-canvas').style.display = 'none';
+  // Remove existing preview
+  if (previewModel) { scene.remove(previewModel); previewModel=null; }
+  mode = 'preview';
+  document.getElementById('reticle').style.display   = 'none';
+  document.getElementById('place-btn').style.display = 'none';
 
   if (!cache[item.glb]) {
-    document.getElementById('loading').style.display   = 'flex';
-    document.getElementById('load-msg').textContent    = item.name+' ачааллаж байна...';
+    document.getElementById('loading').style.display = 'flex';
+    document.getElementById('load-msg').textContent  = item.name+' ачааллаж байна...';
   }
 
   loadGLB(item.glb, model => {
     document.getElementById('loading').style.display = 'none';
     if (!model) return;
-    const clone = model.clone();
+
+    previewModel = model.clone();
     rotX=0.15; rotY=0; modelScale=0.5; autoRotate=true;
-    clone.scale.setScalar(modelScale);
-    scene.add(clone);
-    currentModel = clone;
-    document.getElementById('three-canvas').style.display = 'block';
+    previewModel.scale.setScalar(modelScale);
+    // Center in front of camera, floating
+    previewModel.position.set(0, floorY + 0.6, -1.5);
+    scene.add(previewModel);
+
+    // Show "place on surface" button inside info panel area
+    showPlaceOnTableBtn();
+    document.getElementById('bottom-hint').textContent = '☝️ Эргүүлж томруулаад ширээнд тавина уу';
   });
+}
+
+function showPlaceOnTableBtn() {
+  // Add inline button under info panel
+  let btn = document.getElementById('surface-mode-btn');
+  if (!btn) {
+    btn = document.createElement('button');
+    btn.id = 'surface-mode-btn';
+    btn.style.cssText = `
+      position:fixed;top:108px;right:14px;z-index:41;
+      background:rgba(232,168,56,.15);border:1px solid rgba(232,168,56,.5);
+      color:#e8a838;border-radius:20px;padding:7px 14px;
+      font-size:12px;font-weight:600;cursor:pointer;
+      backdrop-filter:blur(8px);white-space:nowrap;
+    `;
+    document.body.appendChild(btn);
+  }
+  btn.textContent = '🪑 Ширээнд тавих';
+  btn.style.display = 'block';
+  btn.onclick = switchToSurface;
 }
 
 function closeInfo() {
   activeIdx = null;
-  document.getElementById('info').style.display        = 'none';
-  document.getElementById('three-canvas').style.display = 'none';
+  mode = 'preview';
+  document.getElementById('info').style.display          = 'none';
+  document.getElementById('reticle').style.display       = 'none';
+  document.getElementById('place-btn').style.display     = 'none';
+  document.getElementById('bottom-hint').textContent     = '👇 Хоол сонгоно уу';
+  const btn = document.getElementById('surface-mode-btn');
+  if (btn) btn.style.display = 'none';
   document.querySelectorAll('.strip-card').forEach(el=>el.classList.remove('active'));
-  if (currentModel) { scene.remove(currentModel); currentModel=null; }
+  if (previewModel) { scene.remove(previewModel); previewModel=null; }
 }
 
-// ── STRIP ─────────────────────────────────────────
+let hTimer;
+function showHint(m){ const el=document.getElementById('mode-hint'); el.textContent=m; el.style.bottom='175px'; el.style.display='block'; clearTimeout(hTimer); hTimer=setTimeout(()=>el.style.display='none',2000); }
+function hideHint(){ clearTimeout(hTimer); hTimer=setTimeout(()=>document.getElementById('mode-hint').style.display='none',900); }
+
 function buildStrip() {
-  const s = document.getElementById('strip'); s.innerHTML='';
-  MENU.forEach((item,i) => {
-    const d = document.createElement('div');
-    d.className = 'strip-card';
-    d.innerHTML = `<div class="strip-emoji">${item.emoji}</div><div class="strip-name">${item.name}</div><div class="strip-price">${item.price}</div>`;
-    d.addEventListener('click', ()=>selectItem(i));
+  const s=document.getElementById('strip'); s.innerHTML='';
+  MENU.forEach((item,i)=>{
+    const d=document.createElement('div');
+    d.className='strip-card';
+    d.innerHTML=`<div class="strip-emoji">${item.emoji}</div><div class="strip-name">${item.name}</div><div class="strip-price">${item.price}</div>`;
+    d.addEventListener('click',()=>selectItem(i));
     s.appendChild(d);
   });
 }
