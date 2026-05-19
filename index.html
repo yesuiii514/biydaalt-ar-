@@ -9,18 +9,18 @@
 html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Segoe UI',sans-serif}
 
 #video{position:fixed;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;display:none}
-#three-canvas{position:fixed;inset:0;width:100%!important;height:100%!important;z-index:5;display:none;touch-action:none}
+#three-canvas{position:fixed;inset:0;width:100%!important;height:100%!important;z-index:10;display:none;touch-action:none}
 
-/* OVERLAY */
 #overlay{position:fixed;inset:0;z-index:50;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(160deg,#0d0d0d,#1a1200);color:#fff;padding:32px}
 #overlay.hidden{display:none}
 .logo-big{font-size:64px;margin-bottom:16px;animation:floatY 3s ease-in-out infinite}
 @keyframes floatY{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 .ov-title{font-size:28px;font-weight:700;letter-spacing:3px;margin-bottom:10px}
 .ov-sub{font-size:14px;color:rgba(255,255,255,.5);text-align:center;line-height:1.7;margin-bottom:40px}
-.start-btn{background:#e8a838;color:#000;border:none;border-radius:50px;padding:16px 44px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 0 32px rgba(232,168,56,.5);-webkit-appearance:none}
+.start-btn{background:#e8a838;color:#000;border:none;border-radius:50px;padding:16px 44px;font-size:17px;font-weight:700;cursor:pointer;box-shadow:0 0 32px rgba(232,168,56,.5);-webkit-appearance:none;appearance:none;margin-bottom:12px;width:100%;max-width:280px}
+.start-btn.secondary{background:rgba(232,168,56,.15);color:#e8a838;box-shadow:none;border:1px solid rgba(232,168,56,.4)}
 
-#loading{position:fixed;inset:0;z-index:55;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:rgba(0,0,0,.8)}
+#loading{position:fixed;inset:0;z-index:55;display:none;align-items:center;justify-content:center;flex-direction:column;gap:16px;background:rgba(0,0,0,.85)}
 .spinner{width:44px;height:44px;border:3px solid rgba(255,255,255,.15);border-top-color:#e8a838;border-radius:50%;animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 #load-msg{font-size:14px;color:rgba(255,255,255,.7);text-align:center;padding:0 24px}
@@ -33,7 +33,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .err-step b{color:#e8a838}
 .retry-btn{background:#e8a838;color:#000;border:none;border-radius:50px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer;-webkit-appearance:none}
 
-/* INFO */
 #info{position:fixed;top:0;left:0;right:0;z-index:40;background:rgba(10,10,10,.93);border-bottom:.5px solid rgba(232,168,56,.3);padding:16px 52px 16px 20px;display:none;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px)}
 .info-row{display:flex;align-items:center;gap:16px}
 .info-emoji{font-size:50px;flex-shrink:0}
@@ -42,41 +41,18 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .info-price{font-size:22px;font-weight:800;color:#e8a838}
 .info-close{position:absolute;top:14px;right:14px;background:rgba(255,255,255,.1);border:none;color:#fff;width:32px;height:32px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center}
 
-/* RETICLE — surface indicator */
-#reticle{
-  position:fixed;z-index:15;pointer-events:none;display:none;
-  transform:translate(-50%,-50%);
-}
-.reticle-ring{
-  width:70px;height:22px;
-  border:2px solid rgba(232,168,56,.9);
-  border-radius:50%;
-  box-shadow:0 0 12px rgba(232,168,56,.6),inset 0 0 8px rgba(232,168,56,.2);
-  animation:retPulse 1.4s ease-in-out infinite;
-}
-@keyframes retPulse{0%,100%{opacity:1;transform:scaleX(1)}50%{opacity:.5;transform:scaleX(1.15)}}
-.reticle-dot{width:5px;height:5px;background:#e8a838;border-radius:50%;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}
+#ghint{position:fixed;bottom:175px;left:50%;transform:translateX(-50%);z-index:41;pointer-events:none;display:none;background:rgba(0,0,0,.6);border-radius:20px;padding:5px 16px;font-size:12px;color:rgba(255,255,255,.7);white-space:nowrap}
 
-/* PLACE button */
-#place-btn{
-  position:fixed;z-index:40;display:none;
-  left:50%;transform:translateX(-50%);
-  background:#e8a838;color:#000;border:none;border-radius:50px;
-  padding:13px 28px;font-size:15px;font-weight:700;cursor:pointer;
-  box-shadow:0 4px 24px rgba(232,168,56,.5);white-space:nowrap;
-  -webkit-appearance:none;
-}
+/* Reticle for XR mode */
+#reticle{position:fixed;inset:0;z-index:15;pointer-events:none;display:none;align-items:center;justify-content:flex-end;flex-direction:column;padding-bottom:240px}
+.reticle-oval{width:100px;height:28px;border:2px solid rgba(232,168,56,.9);border-radius:50%;box-shadow:0 0 16px rgba(232,168,56,.6),inset 0 0 8px rgba(232,168,56,.15);animation:retPulse 1.2s ease-in-out infinite;position:relative}
+@keyframes retPulse{0%,100%{opacity:1;transform:scaleX(1)}50%{opacity:.5;transform:scaleX(1.12)}}
+.reticle-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:6px;height:6px;background:#e8a838;border-radius:50%}
+#reticle-label{color:rgba(255,255,255,.7);font-size:12px;margin-top:10px;background:rgba(0,0,0,.5);padding:4px 12px;border-radius:20px}
 
-/* MODE hint */
-#mode-hint{
-  position:fixed;left:50%;transform:translateX(-50%);
-  z-index:41;pointer-events:none;
-  background:rgba(0,0,0,.6);border-radius:20px;
-  padding:5px 16px;font-size:12px;color:rgba(255,255,255,.75);
-  white-space:nowrap;display:none;
-}
+/* Place button */
+#place-btn{position:fixed;bottom:175px;left:50%;transform:translateX(-50%);z-index:41;display:none;background:#e8a838;color:#000;border:none;border-radius:50px;padding:13px 30px;font-size:15px;font-weight:700;cursor:pointer;box-shadow:0 4px 24px rgba(232,168,56,.5);white-space:nowrap;-webkit-appearance:none}
 
-/* BOTTOM */
 #bottom{position:fixed;bottom:0;left:0;right:0;z-index:40;padding:0 12px 28px;display:none}
 .hint-txt{text-align:center;color:rgba(255,255,255,.55);font-size:12px;margin-bottom:10px;background:rgba(0,0,0,.6);border-radius:20px;padding:5px 14px;display:inline-block;width:100%}
 .scroll-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
@@ -93,29 +69,33 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 
 <video id="video" autoplay playsinline muted></video>
 <canvas id="three-canvas"></canvas>
+<div id="ghint"></div>
 
-<div id="reticle"><div class="reticle-ring"></div><div class="reticle-dot"></div></div>
-<div id="mode-hint"></div>
+<!-- XR reticle -->
+<div id="reticle">
+  <div class="reticle-oval"><div class="reticle-dot"></div></div>
+  <div id="reticle-label">Ширээрүү чиглүүлнэ үү</div>
+</div>
 <button id="place-btn">📍 Энд тавих</button>
 
 <div id="overlay">
   <div class="logo-big">🍜</div>
   <div class="ov-title">AR МЕНЮ</div>
-  <div class="ov-sub">Хоол сонгоод ширээн дээр<br>хүссэн газраа тавина уу</div>
-  <button class="start-btn" id="startBtn">📷 Камер нээх</button>
+  <div class="ov-sub">Хоол сонгоод ширээн дээр<br>тавьж харна уу</div>
+  <button class="start-btn" id="startXRBtn">✨ AR горим (iOS/Android)</button>
+  <button class="start-btn secondary" id="startBtn">📷 Камер горим</button>
 </div>
 
-<div id="loading"><div class="spinner"></div><div id="load-msg">Камер нээж байна...</div></div>
+<div id="loading"><div class="spinner"></div><div id="load-msg">Ачааллаж байна...</div></div>
 
 <div id="err-panel">
   <div style="font-size:52px;margin-bottom:12px">📵</div>
-  <div style="font-size:18px;font-weight:700;color:#ff6b6b;margin-bottom:4px">Камер нэвтрэх боломжгүй</div>
+  <div style="font-size:18px;font-weight:700;color:#ff6b6b;margin-bottom:4px">Алдаа гарлаа</div>
   <div id="err-detail"></div>
   <div class="err-steps">
-    <div class="err-step">1. Chrome дээрх <b>🔒 цоож</b> дарна уу</div>
-    <div class="err-step">2. <b>Сайтын тохиргоо → Камер</b></div>
-    <div class="err-step">3. <b>Зөвшөөрөх</b> болгоно уу</div>
-    <div class="err-step">4. Хуудсыг <b>refresh</b> хийнэ үү</div>
+    <div class="err-step">1. Chrome/Safari дээрх <b>🔒 цоож</b> дарна уу</div>
+    <div class="err-step">2. <b>Камер → Зөвшөөрөх</b> болгоно уу</div>
+    <div class="err-step">3. Хуудсыг <b>refresh</b> хийнэ үү</div>
   </div>
   <button class="retry-btn" onclick="location.reload()">🔄 Дахин оролдох</button>
 </div>
@@ -147,36 +127,172 @@ const MENU = [
   {name:"Хот дог", price:"₮5,000",  desc:"Франкфурт, горчица",                  glb:"hotdog.glb", emoji:"🌭"},
 ];
 
-// ── State ──
+// ── Shared state ──────────────────────────────────
 let renderer, scene, camera, clock;
 let activeIdx = null;
 const cache = {};
+let useXR = false; // which mode we're in
 
-// Mode: 'preview' (floating center) or 'place' (on surface)
-let mode = 'preview';
-
-// Preview model (floating, user can rotate/zoom)
-let previewModel = null;
+// Preview mode state
+let currentModel = null;
 let rotX = 0.15, rotY = 0, modelScale = 0.5;
 const SCALE_MIN = 0.1, SCALE_MAX = 10;
 let drag = null, pinch = null, autoRotate = true, lastTouch = 0;
 
-// Placed models on "surface"
-let placedModels = []; // {mesh, x, z} in 3D world
+// XR mode state
+let xrSession = null, xrRefSpace = null, hitTestSource = null;
+let reticleXR = null;       // Three.js mesh shown at hit point
+let placedGroup = null;     // currently selected model clone for placement
+let xrPlacedModels = [];    // all placed models
+let hitPose = null;         // latest hit test pose matrix
 
-// Reticle world position
-let reticlePos = new THREE.Vector3(0, 0, -1.5);
+// ── Buttons ───────────────────────────────────────
+document.getElementById('startXRBtn').addEventListener('click', startXR);
+document.getElementById('startBtn').addEventListener('click', startCamera);
+document.getElementById('place-btn').addEventListener('click', placeXR);
 
-// Camera tilt tracking for surface detection
-let floorY = -1.0; // estimated floor Y in world space
+// ── XR START ─────────────────────────────────────
+async function startXR() {
+  if (!navigator.xr) { return fallbackCamera('WebXR дэмжигдэхгүй байна'); }
 
-// ── Init ──
-document.getElementById('startBtn').addEventListener('click', startAR);
-document.getElementById('place-btn').addEventListener('click', placeModel);
+  const supported = await navigator.xr.isSessionSupported('immersive-ar').catch(() => false);
+  if (!supported) { return fallbackCamera('Таны утас AR дэмжихгүй байна'); }
 
-async function startAR() {
   document.getElementById('overlay').classList.add('hidden');
   document.getElementById('loading').style.display = 'flex';
+  document.getElementById('load-msg').textContent  = 'AR горим нээж байна...';
+
+  try {
+    xrSession = await navigator.xr.requestSession('immersive-ar', {
+      requiredFeatures: ['hit-test'],
+      optionalFeatures: ['dom-overlay', 'light-estimation'],
+      domOverlay: { root: document.body },
+    });
+  } catch(e) {
+    return fallbackCamera('AR session: ' + e.message);
+  }
+
+  useXR = true;
+  initThreeXR();
+  buildStrip();
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('bottom').style.display  = 'block';
+  MENU.forEach(item => loadGLB(item.glb, ()=>{}));
+}
+
+function initThreeXR() {
+  const canvas = document.getElementById('three-canvas');
+  renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setClearColor(0,0);
+  renderer.xr.enabled = true;
+  renderer.xr.setSession(xrSession);
+
+  scene  = new THREE.Scene();
+  clock  = new THREE.Clock();
+  camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.01, 20);
+
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const d = new THREE.DirectionalLight(0xfff5e0, 1.2);
+  d.position.set(1,3,2); scene.add(d);
+
+  // Reticle mesh — flat ring on surface
+  const geo = new THREE.RingGeometry(0.06, 0.1, 32);
+  geo.applyMatrix4(new THREE.Matrix4().makeRotationX(-Math.PI/2));
+  const mat = new THREE.MeshBasicMaterial({color:0xe8a838, transparent:true, opacity:0.85, side:THREE.DoubleSide});
+  reticleXR = new THREE.Mesh(geo, mat);
+  reticleXR.visible = false;
+  scene.add(reticleXR);
+
+  canvas.style.display = 'block';
+
+  // XR reference spaces & hit test
+  xrSession.addEventListener('end', ()=>{ xrSession=null; location.reload(); });
+
+  xrSession.requestReferenceSpace('viewer').then(vs => {
+    xrSession.requestHitTestSource({space:vs}).then(src => { hitTestSource = src; });
+  });
+  xrSession.requestReferenceSpace('local').then(rs => { xrRefSpace = rs; });
+
+  renderer.setAnimationLoop(xrFrame);
+}
+
+function xrFrame(time, frame) {
+  if (!frame) return;
+  const t = clock.getElapsedTime();
+
+  // Hit test
+  if (hitTestSource && xrRefSpace) {
+    const hits = frame.getHitTestResults(hitTestSource);
+    if (hits.length > 0) {
+      const pose = hits[0].getPose(xrRefSpace);
+      hitPose = pose.transform;
+      reticleXR.visible = true;
+      reticleXR.matrix.fromArray(hitPose.matrix);
+      reticleXR.matrix.decompose(reticleXR.position, reticleXR.quaternion, reticleXR.scale);
+
+      // Move placement preview to hit point
+      if (placedGroup) {
+        placedGroup.position.setFromMatrixPosition(new THREE.Matrix4().fromArray(hitPose.matrix));
+        placedGroup.visible = true;
+      }
+
+      // Show reticle UI & place button if item selected
+      if (activeIdx !== null) {
+        document.getElementById('reticle').style.display   = 'flex';
+        document.getElementById('place-btn').style.display = 'block';
+        document.getElementById('reticle-label').textContent = '📍 Энд тавих товчийг дарна уу';
+      }
+    } else {
+      reticleXR.visible = false;
+      if (placedGroup) placedGroup.visible = false;
+      document.getElementById('reticle-label').textContent = 'Ширээрүү чиглүүлнэ үү';
+    }
+  }
+
+  // Rotate placed models slowly
+  xrPlacedModels.forEach(m => { m.rotation.y = t*0.4 + m.userData.ro; });
+
+  // Pulse reticle ring
+  if (reticleXR.visible) {
+    const s = 1 + Math.sin(t*3)*0.06;
+    reticleXR.scale.set(s,s,s);
+  }
+
+  renderer.render(scene, camera);
+}
+
+function placeXR() {
+  if (!hitPose || activeIdx === null) return;
+  const item = MENU[activeIdx];
+  if (navigator.vibrate) navigator.vibrate(60);
+
+  loadGLB(item.glb, model => {
+    const clone = model.clone();
+    const pos = new THREE.Vector3();
+    pos.setFromMatrixPosition(new THREE.Matrix4().fromArray(hitPose.matrix));
+    clone.position.copy(pos);
+    clone.scale.setScalar(0.15);
+    clone.userData.ro = Math.random()*Math.PI*2;
+    scene.add(clone);
+    xrPlacedModels.push(clone);
+
+    // Pop-in animation
+    let s = 0.01;
+    const iv = setInterval(()=>{
+      s += (0.15-s)*0.2;
+      clone.scale.setScalar(s);
+      if(Math.abs(s-0.15)<0.003){ clone.scale.setScalar(0.15); clearInterval(iv); }
+    },16);
+  });
+}
+
+// ── CAMERA (fallback) MODE ─────────────────────────
+async function startCamera() {
+  document.getElementById('overlay').classList.add('hidden');
+  document.getElementById('loading').style.display = 'flex';
+  document.getElementById('load-msg').textContent  = 'Камер нээж байна...';
 
   let stream = null, lastErr = null;
   for (const c of [
@@ -189,8 +305,8 @@ async function startAR() {
   }
 
   if (!stream) {
-    document.getElementById('loading').style.display = 'none';
-    document.getElementById('err-detail').textContent = lastErr ? lastErr.name+': '+lastErr.message : '';
+    document.getElementById('loading').style.display   = 'none';
+    document.getElementById('err-detail').textContent  = lastErr ? lastErr.name+': '+lastErr.message : '';
     document.getElementById('err-panel').style.display = 'flex';
     return;
   }
@@ -198,324 +314,184 @@ async function startAR() {
   const vid = document.getElementById('video');
   vid.srcObject = stream;
   vid.style.display = 'block';
-  try { await vid.play(); } catch(e) { vid.oncanplay = ()=>vid.play().catch(()=>{}); }
+  try { await vid.play(); } catch(e) { vid.oncanplay=()=>vid.play().catch(()=>{}); }
 
-  await new Promise(res => {
-    if (vid.videoWidth > 0) return res();
-    const t = setTimeout(res, 2000);
-    vid.addEventListener('loadedmetadata', ()=>{ clearTimeout(t); res(); }, {once:true});
+  await new Promise(res=>{
+    if(vid.videoWidth>0) return res();
+    const t=setTimeout(res,2000);
+    vid.addEventListener('loadedmetadata',()=>{clearTimeout(t);res();},{once:true});
   });
 
   document.getElementById('loading').style.display = 'none';
-  initThree();
+  initThreeCamera();
   buildStrip();
   document.getElementById('bottom').style.display = 'block';
   MENU.forEach(item => loadGLB(item.glb, ()=>{}));
 }
 
-// ── Three.js ──
-function initThree() {
+function fallbackCamera(msg) {
+  document.getElementById('loading').style.display = 'none';
+  // Show non-blocking notice then launch camera mode
+  const notice = document.createElement('div');
+  notice.style.cssText='position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:99;background:rgba(255,100,50,.85);color:#fff;padding:10px 20px;border-radius:20px;font-size:13px;max-width:80vw;text-align:center';
+  notice.textContent = msg + ' — Камер горим руу шилжиж байна';
+  document.body.appendChild(notice);
+  setTimeout(()=>notice.remove(), 3000);
+  startCamera();
+}
+
+function initThreeCamera() {
   const canvas = document.getElementById('three-canvas');
   const W = window.innerWidth, H = window.innerHeight;
-
   renderer = new THREE.WebGLRenderer({canvas, alpha:true, antialias:true});
-  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
   renderer.setSize(W, H);
-  renderer.shadowMap.enabled = true;
-  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.setClearColor(0, 0);
 
-  scene = new THREE.Scene();
-  clock = new THREE.Clock();
+  scene  = new THREE.Scene();
+  clock  = new THREE.Clock();
+  camera = new THREE.PerspectiveCamera(45, W/H, 0.01, 100);
+  camera.position.set(0, 1.2, 3.5);
+  camera.lookAt(0, 0, 0);
 
-  // Perspective camera simulating phone held at ~chest height
-  camera = new THREE.PerspectiveCamera(60, W/H, 0.01, 50);
-  camera.position.set(0, 1.4, 0); // eye height ~1.4m
-  camera.rotation.x = -0.4;       // tilted down ~23deg toward table
+  scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+  const dir = new THREE.DirectionalLight(0xfff5e0, 1.4);
+  dir.position.set(2,4,3); scene.add(dir);
+  const fill = new THREE.PointLight(0xe8a838, 0.5, 12);
+  fill.position.set(-2,2,1); scene.add(fill);
+  scene.add(new THREE.DirectionalLight(0xffffff, 0.3)).position.set(0,-2,-3);
 
-  // Lights
-  scene.add(new THREE.AmbientLight(0xffffff, 0.7));
-  const sun = new THREE.DirectionalLight(0xfff5e0, 1.2);
-  sun.position.set(2, 5, 3);
-  sun.castShadow = true;
-  sun.shadow.mapSize.width = 512;
-  sun.shadow.mapSize.height = 512;
-  sun.shadow.camera.near = 0.1;
-  sun.shadow.camera.far = 20;
-  sun.shadow.camera.left = -3;
-  sun.shadow.camera.right = 3;
-  sun.shadow.camera.top = 3;
-  sun.shadow.camera.bottom = -3;
-  scene.add(sun);
-  const fill = new THREE.PointLight(0xe8a838, 0.4, 10);
-  fill.position.set(-2, 2, 1); scene.add(fill);
-
-  // Invisible floor plane for shadow
-  const floorGeo = new THREE.PlaneGeometry(20, 20);
-  const floorMat = new THREE.ShadowMaterial({opacity:0.35});
-  const floor = new THREE.Mesh(floorGeo, floorMat);
-  floor.rotation.x = -Math.PI/2;
-  floor.position.y = floorY;
-  floor.receiveShadow = true;
-  scene.add(floor);
-
-  // Touch events
   canvas.addEventListener('touchstart', onTS, {passive:false});
   canvas.addEventListener('touchmove',  onTM, {passive:false});
   canvas.addEventListener('touchend',   onTE, {passive:false});
 
   window.addEventListener('resize', ()=>{
     const W=window.innerWidth, H=window.innerHeight;
-    renderer.setSize(W,H);
+    renderer.setSize(W, H);
     camera.aspect=W/H;
     camera.updateProjectionMatrix();
   });
 
-  canvas.style.display = 'block';
-  animate();
+  canvas.style.display = 'none';
+  animateCamera();
 }
 
-function animate() {
-  requestAnimationFrame(animate);
-  if (!renderer) return;
-  const t = clock.getElapsedTime();
-
-  if (mode === 'preview' && previewModel) {
-    if (autoRotate) rotY += 0.008;
-    previewModel.rotation.x = rotX;
-    previewModel.rotation.y = rotY;
-    previewModel.position.y = floorY + modelScale*0.5 + Math.sin(t*1.2)*0.05*modelScale;
-  }
-
-  // Animate placed models (slow rotate)
-  placedModels.forEach(p => {
-    p.mesh.rotation.y = t * 0.4 + p.rotOff;
-  });
-
-  // Pulse reticle
-  const ret = document.getElementById('reticle');
-  if (ret.style.display !== 'none') {
-    // Project reticle world pos to screen
-    const projected = reticlePos.clone().project(camera);
-    const sx = ( projected.x * 0.5 + 0.5) * window.innerWidth;
-    const sy = (-projected.y * 0.5 + 0.5) * window.innerHeight;
-    ret.style.left = sx + 'px';
-    ret.style.top  = sy + 'px';
-  }
-
+function animateCamera() {
+  requestAnimationFrame(animateCamera);
+  if (!currentModel || !renderer) return;
+  if (autoRotate) rotY += 0.008;
+  currentModel.rotation.x = rotX;
+  currentModel.rotation.y = rotY;
+  currentModel.position.y = Math.sin(clock.getElapsedTime()*1.1)*0.06;
   renderer.render(scene, camera);
 }
 
-// ── Touch ──
+// ── Touch (camera mode only) ──────────────────────
 function onTS(e) {
-  e.preventDefault();
-  lastTouch = Date.now();
-  autoRotate = false;
-
-  if (mode === 'surface') {
-    // In surface mode: 1 finger moves reticle, 2 finger pinch scales preview
-    if (e.touches.length === 1) {
-      drag = {x: e.touches[0].clientX, y: e.touches[0].clientY, rx: reticlePos.x, rz: reticlePos.z};
-      showHint('☝️ Байрлал зөрүүлэх');
-    } else if (e.touches.length === 2) {
-      pinch = {dist: tDist(e.touches), scale: modelScale};
-      showHint('🤏 Томруулах');
-    }
-    return;
-  }
-
-  // Preview mode: rotate / pinch zoom
-  if (e.touches.length === 1) {
-    drag = {x: e.touches[0].clientX, y: e.touches[0].clientY, rotX, rotY};
-    showHint('☝️ Эргүүлэх');
-  } else if (e.touches.length === 2) {
-    pinch = {dist: tDist(e.touches), scale: modelScale};
-    showHint('🤏 Томруулах / жижигрүүлэх');
-  }
+  e.preventDefault(); lastTouch=Date.now(); autoRotate=false;
+  if (e.touches.length===1) { drag={x:e.touches[0].clientX,y:e.touches[0].clientY,rotX,rotY}; pinch=null; showHint('☝️ Эргүүлэх'); }
+  else if (e.touches.length===2) { pinch={dist:tDist(e.touches),scale:modelScale}; drag=null; showHint('🤏 Томруулах'); }
 }
-
 function onTM(e) {
-  e.preventDefault();
-  lastTouch = Date.now();
-
-  if (mode === 'surface') {
-    if (e.touches.length === 1 && drag) {
-      // Move reticle along floor plane
-      const dx = (e.touches[0].clientX - drag.x) / window.innerWidth  *  3;
-      const dz = (e.touches[0].clientY - drag.y) / window.innerHeight * -2;
-      reticlePos.x = drag.rx + dx;
-      reticlePos.z = drag.rz - dz;
-      reticlePos.y = floorY;
-      // Move preview model with reticle
-      if (previewModel) {
-        previewModel.position.x = reticlePos.x;
-        previewModel.position.z = reticlePos.z;
-      }
-    } else if (e.touches.length === 2 && pinch) {
-      modelScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.scale * tDist(e.touches)/pinch.dist));
-      if (previewModel) previewModel.scale.setScalar(modelScale);
-    }
-    return;
-  }
-
-  // Preview mode
-  if (e.touches.length === 1 && drag) {
-    const dx = e.touches[0].clientX - drag.x;
-    const dy = e.touches[0].clientY - drag.y;
-    rotY = drag.rotY + (dx/window.innerWidth)  * Math.PI * 2;
-    rotX = drag.rotX + (dy/window.innerHeight) * Math.PI * 1.5;
-    rotX = Math.max(-Math.PI/2, Math.min(Math.PI/2, rotX));
-    if (previewModel) { previewModel.rotation.x=rotX; previewModel.rotation.y=rotY; }
-  } else if (e.touches.length === 2 && pinch) {
-    modelScale = Math.max(SCALE_MIN, Math.min(SCALE_MAX, pinch.scale * tDist(e.touches)/pinch.dist));
-    if (previewModel) previewModel.scale.setScalar(modelScale);
+  e.preventDefault(); lastTouch=Date.now();
+  if (e.touches.length===1 && drag) {
+    const dx=e.touches[0].clientX-drag.x, dy=e.touches[0].clientY-drag.y;
+    rotY=drag.rotY+(dx/window.innerWidth)*Math.PI*2;
+    rotX=drag.rotX+(dy/window.innerHeight)*Math.PI*1.5;
+    rotX=Math.max(-Math.PI/2,Math.min(Math.PI/2,rotX));
+    if(currentModel){currentModel.rotation.x=rotX;currentModel.rotation.y=rotY;}
+  } else if (e.touches.length===2 && pinch) {
+    modelScale=Math.max(SCALE_MIN,Math.min(SCALE_MAX,pinch.scale*tDist(e.touches)/pinch.dist));
+    if(currentModel) currentModel.scale.setScalar(modelScale);
   }
 }
-
 function onTE(e) {
-  e.preventDefault();
-  drag = null; pinch = null; hideHint();
-  setTimeout(()=>{ if(Date.now()-lastTouch>=2000) autoRotate=true; }, 2000);
+  e.preventDefault(); drag=null; pinch=null; hideHint();
+  setTimeout(()=>{if(Date.now()-lastTouch>=2000) autoRotate=true;},2000);
 }
+function tDist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
 
-function tDist(t) { return Math.hypot(t[0].clientX-t[1].clientX, t[0].clientY-t[1].clientY); }
+let hTimer;
+function showHint(m){const el=document.getElementById('ghint');el.textContent=m;el.style.display='block';clearTimeout(hTimer);}
+function hideHint(){hTimer=setTimeout(()=>{document.getElementById('ghint').style.display='none';},900);}
 
-// ── Mode switch: preview → surface ──
-function switchToSurface() {
-  if (!previewModel) return;
-  mode = 'surface';
-  autoRotate = false;
-
-  // Place preview model at initial reticle position on floor
-  reticlePos.set(0, floorY, -1.5);
-  previewModel.position.set(reticlePos.x, floorY + modelScale*0.5, reticlePos.z);
-  previewModel.rotation.x = 0;
-  previewModel.rotation.y = 0;
-  previewModel.castShadow = true;
-
-  document.getElementById('reticle').style.display   = 'block';
-  document.getElementById('place-btn').style.display = 'block';
-  document.getElementById('place-btn').style.bottom  = '175px';
-  document.getElementById('bottom-hint').textContent = '👆 Drag хийж байрлуулаад тавина уу';
-  showHint('☝️ Хуруугаар байрлал зөрүүлнэ үү');
-}
-
-// ── Place model ──
-function placeModel() {
-  if (!previewModel || mode !== 'surface') return;
-  if (navigator.vibrate) navigator.vibrate(60);
-
-  // Clone and keep placed
-  const clone = previewModel.clone();
-  clone.position.copy(previewModel.position);
-  clone.scale.copy(previewModel.scale);
-  clone.rotation.set(0, Math.random()*Math.PI*2, 0);
-  clone.castShadow = true;
-  scene.add(clone);
-  placedModels.push({mesh: clone, rotOff: Math.random()*Math.PI*2});
-
-  // Reset to preview mode for next interaction
-  document.getElementById('reticle').style.display   = 'none';
-  document.getElementById('place-btn').style.display = 'none';
-  document.getElementById('bottom-hint').textContent = '✅ Тавигдлаа! Дахин тавихыг хүсвэл "Ширээнд тавих" дарна уу';
-  mode = 'preview';
-}
-
-// ── GLB ──
+// ── GLB loader ────────────────────────────────────
 function loadGLB(file, cb) {
   if (cache[file]) { cb(cache[file]); return; }
   new THREE.GLTFLoader().load(file, gltf => {
     const m   = gltf.scene;
     const box = new THREE.Box3().setFromObject(m);
     const mx  = Math.max(...box.getSize(new THREE.Vector3()).toArray());
-    const sc  = 1.0 / mx;
+    const sc  = 1.0/mx;
     m.scale.setScalar(sc);
     const c = box.getCenter(new THREE.Vector3());
-    m.position.set(-c.x*sc, -c.y*sc, -c.z*sc);
-    // Enable shadows
-    m.traverse(n => { if(n.isMesh){ n.castShadow=true; n.receiveShadow=true; } });
-    cache[file] = m;
-    cb(m);
-  }, undefined, err=>{ console.warn(err); cb(null); });
+    m.position.set(-c.x*sc,-c.y*sc,-c.z*sc);
+    cache[file]=m; cb(m);
+  }, undefined, err=>{console.warn(err);cb(null);});
 }
 
-// ── Select ──
+// ── Select / show / close ─────────────────────────
 function selectItem(idx) {
-  if (activeIdx === idx) { closeInfo(); return; }
-  activeIdx = idx;
-  const item = MENU[idx];
-
+  if (activeIdx===idx){closeInfo();return;}
+  activeIdx=idx;
+  const item=MENU[idx];
   document.querySelectorAll('.strip-card').forEach((el,i)=>el.classList.toggle('active',i===idx));
-  document.getElementById('iEmoji').textContent = item.emoji;
-  document.getElementById('iName').textContent  = item.name;
-  document.getElementById('iDesc').textContent  = item.desc;
-  document.getElementById('iPrice').textContent = item.price;
-  document.getElementById('info').style.display = 'block';
+  document.getElementById('iEmoji').textContent=item.emoji;
+  document.getElementById('iName').textContent=item.name;
+  document.getElementById('iDesc').textContent=item.desc;
+  document.getElementById('iPrice').textContent=item.price;
+  document.getElementById('info').style.display='block';
 
-  // Remove existing preview
-  if (previewModel) { scene.remove(previewModel); previewModel=null; }
-  mode = 'preview';
-  document.getElementById('reticle').style.display   = 'none';
-  document.getElementById('place-btn').style.display = 'none';
+  if (useXR) selectXR(item);
+  else       selectCamera(item);
+}
 
-  if (!cache[item.glb]) {
-    document.getElementById('loading').style.display = 'flex';
-    document.getElementById('load-msg').textContent  = item.name+' ачааллаж байна...';
-  }
+function selectXR(item) {
+  // Remove old placement preview
+  if (placedGroup) { scene.remove(placedGroup); placedGroup=null; }
+  document.getElementById('reticle').style.display='flex';
+  document.getElementById('bottom-hint').textContent='📷 Ширээрүү чиглүүлж тавина уу';
 
-  loadGLB(item.glb, model => {
-    document.getElementById('loading').style.display = 'none';
-    if (!model) return;
-
-    previewModel = model.clone();
-    rotX=0.15; rotY=0; modelScale=0.5; autoRotate=true;
-    previewModel.scale.setScalar(modelScale);
-    // Center in front of camera, floating
-    previewModel.position.set(0, floorY + 0.6, -1.5);
-    scene.add(previewModel);
-
-    // Show "place on surface" button inside info panel area
-    showPlaceOnTableBtn();
-    document.getElementById('bottom-hint').textContent = '☝️ Эргүүлж томруулаад ширээнд тавина уу';
+  loadGLB(item.glb, model=>{
+    if(!model) return;
+    placedGroup=model.clone();
+    placedGroup.scale.setScalar(0.15);
+    placedGroup.visible=false;
+    scene.add(placedGroup);
   });
 }
 
-function showPlaceOnTableBtn() {
-  // Add inline button under info panel
-  let btn = document.getElementById('surface-mode-btn');
-  if (!btn) {
-    btn = document.createElement('button');
-    btn.id = 'surface-mode-btn';
-    btn.style.cssText = `
-      position:fixed;top:108px;right:14px;z-index:41;
-      background:rgba(232,168,56,.15);border:1px solid rgba(232,168,56,.5);
-      color:#e8a838;border-radius:20px;padding:7px 14px;
-      font-size:12px;font-weight:600;cursor:pointer;
-      backdrop-filter:blur(8px);white-space:nowrap;
-    `;
-    document.body.appendChild(btn);
+function selectCamera(item) {
+  if(currentModel){scene.remove(currentModel);currentModel=null;}
+  document.getElementById('three-canvas').style.display='none';
+  if(!cache[item.glb]){
+    document.getElementById('loading').style.display='flex';
+    document.getElementById('load-msg').textContent=item.name+' ачааллаж байна...';
   }
-  btn.textContent = '🪑 Ширээнд тавих';
-  btn.style.display = 'block';
-  btn.onclick = switchToSurface;
+  loadGLB(item.glb, model=>{
+    document.getElementById('loading').style.display='none';
+    if(!model) return;
+    const clone=model.clone();
+    rotX=0.15; rotY=0; modelScale=0.5; autoRotate=true;
+    clone.scale.setScalar(modelScale);
+    scene.add(clone);
+    currentModel=clone;
+    document.getElementById('three-canvas').style.display='block';
+    document.getElementById('bottom-hint').textContent='☝️ Эргүүлж томруулж харна уу';
+  });
 }
 
 function closeInfo() {
-  activeIdx = null;
-  mode = 'preview';
-  document.getElementById('info').style.display          = 'none';
-  document.getElementById('reticle').style.display       = 'none';
-  document.getElementById('place-btn').style.display     = 'none';
-  document.getElementById('bottom-hint').textContent     = '👇 Хоол сонгоно уу';
-  const btn = document.getElementById('surface-mode-btn');
-  if (btn) btn.style.display = 'none';
+  activeIdx=null;
+  document.getElementById('info').style.display='none';
+  document.getElementById('reticle').style.display='none';
+  document.getElementById('place-btn').style.display='none';
+  document.getElementById('three-canvas').style.display='none';
+  document.getElementById('bottom-hint').textContent='👇 Хоол сонгоно уу';
   document.querySelectorAll('.strip-card').forEach(el=>el.classList.remove('active'));
-  if (previewModel) { scene.remove(previewModel); previewModel=null; }
+  if(currentModel){scene.remove(currentModel);currentModel=null;}
+  if(placedGroup){scene.remove(placedGroup);placedGroup=null;}
 }
-
-let hTimer;
-function showHint(m){ const el=document.getElementById('mode-hint'); el.textContent=m; el.style.bottom='175px'; el.style.display='block'; clearTimeout(hTimer); hTimer=setTimeout(()=>el.style.display='none',2000); }
-function hideHint(){ clearTimeout(hTimer); hTimer=setTimeout(()=>document.getElementById('mode-hint').style.display='none',900); }
 
 function buildStrip() {
   const s=document.getElementById('strip'); s.innerHTML='';
