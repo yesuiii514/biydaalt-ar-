@@ -182,8 +182,8 @@ let renderer, scene, camera, clock;
 let currentModel = null, activeIdx = null;
 const cache = {};
 
-let rotX = 0.15, rotY = 0, modelScale = 1.8;
-const SCALE_MIN = 0.3, SCALE_MAX = 10;
+let rotX = 0.15, rotY = 0, modelScale = 0.5;
+const SCALE_MIN = 0.1, SCALE_MAX = 10;
 let drag = null, pinch = null, autoRotate = true, lastTouch = 0;
 
 // ── BUTTON ───────────────────────────────────────
@@ -337,7 +337,7 @@ function loadGLB(file, cb) {
     const m   = gltf.scene;
     const box = new THREE.Box3().setFromObject(m);
     const mx  = Math.max(...box.getSize(new THREE.Vector3()).toArray());
-    const sc  = 1.8 / mx;
+    const sc  = 1.0 / mx;
     m.scale.setScalar(sc);
     const c = box.getCenter(new THREE.Vector3());
     m.position.set(-c.x*sc, -c.y*sc, -c.z*sc);
@@ -373,7 +373,7 @@ function showModel(item) {
     document.getElementById('loading').style.display = 'none';
     if (!model) return;
     const clone = model.clone();
-    rotX=0.15; rotY=0; modelScale=1.8; autoRotate=true;
+    rotX=0.15; rotY=0; modelScale=0.5; autoRotate=true;
     clone.scale.setScalar(modelScale);
     scene.add(clone);
     currentModel = clone;
