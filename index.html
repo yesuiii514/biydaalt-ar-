@@ -32,15 +32,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .err-step b{color:#e8a838}
 .retry-btn{background:#e8a838;color:#000;border:none;border-radius:50px;padding:14px 36px;font-size:16px;font-weight:700;cursor:pointer}
 
-#ghint{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:41;pointer-events:none;display:none;background:rgba(0,0,0,.65);border-radius:20px;padding:7px 20px;font-size:14px;color:rgba(255,255,255,.85);white-space:nowrap}
+#ghint{position:fixed;z-index:41;pointer-events:none;display:none;background:rgba(0,0,0,.65);border-radius:20px;padding:7px 20px;font-size:14px;color:rgba(255,255,255,.85);white-space:nowrap;left:50%;transform:translateX(-50%)}
 
 /* ── BOTTOM SHEET ── */
 #bottom-sheet{
   position:fixed;bottom:0;left:0;right:0;z-index:40;
   display:none;flex-direction:column;
 }
-
-/* INFO */
 #info{
   background:rgba(8,8,8,.97);
   border-top:.5px solid rgba(232,168,56,.2);
@@ -53,8 +51,6 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   width:32px;height:32px;border-radius:50%;font-size:15px;cursor:pointer;
   display:flex;align-items:center;justify-content:center;z-index:2;
 }
-
-/* Нэр + үнэ */
 .info-top{
   display:flex;align-items:center;justify-content:space-between;
   padding:18px 52px 12px 20px;
@@ -62,19 +58,13 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 }
 .info-name{font-size:22px;font-weight:700;color:#fff}
 .info-price{font-size:24px;font-weight:800;color:#e8a838;white-space:nowrap;margin-left:8px}
-
-/* Stats */
 .info-stats{
   display:flex;gap:8px;padding:12px 20px;
   border-bottom:.5px solid rgba(255,255,255,.07);
   overflow-x:auto;scrollbar-width:none;
 }
 .info-stats::-webkit-scrollbar{display:none}
-.stat-pill{
-  display:flex;align-items:center;gap:5px;
-  border-radius:22px;padding:6px 13px;
-  white-space:nowrap;flex-shrink:0;
-}
+.stat-pill{display:flex;align-items:center;gap:5px;border-radius:22px;padding:6px 13px;white-space:nowrap;flex-shrink:0}
 .stat-pill span{font-size:13px;font-weight:500}
 .stat-pill.gold{background:rgba(232,168,56,.15);border:.5px solid rgba(232,168,56,.3)}
 .stat-pill.gold span{color:#e8a838}
@@ -82,38 +72,20 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .stat-pill.gray span{color:rgba(255,255,255,.75)}
 .stat-pill.red{background:rgba(255,90,50,.1);border:.5px solid rgba(255,90,50,.25)}
 .stat-pill.red span{color:#ff8a65}
-
-/* Tags */
-.info-tags{
-  display:flex;gap:7px;padding:10px 20px;
-  border-bottom:.5px solid rgba(255,255,255,.07);
-  flex-wrap:wrap;
-}
+.info-tags{display:flex;gap:7px;padding:10px 20px;border-bottom:.5px solid rgba(255,255,255,.07);flex-wrap:wrap}
 .tag{font-size:12px;font-weight:600;border-radius:8px;padding:4px 11px;border:.5px solid rgba(255,255,255,.15);color:rgba(255,255,255,.65)}
 .tag.hot{border-color:rgba(255,100,50,.45);color:#ff8a65;background:rgba(255,90,50,.08)}
 .tag.gold{border-color:rgba(232,168,56,.45);color:#e8a838;background:rgba(232,168,56,.08)}
 .tag.green{border-color:rgba(100,200,100,.4);color:#81c784;background:rgba(100,200,100,.08)}
-
-/* Орц */
 .info-ingr{padding:12px 20px 16px}
 .ingr-label{font-size:11px;font-weight:600;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-bottom:6px}
 .ingr-text{font-size:14px;color:rgba(255,255,255,.6);line-height:1.65}
 
-/* Strip */
-#strip-wrap{
-  background:rgba(5,5,5,.98);
-  padding:10px 14px 32px;
-  border-top:.5px solid rgba(255,255,255,.05);
-}
+#strip-wrap{background:rgba(5,5,5,.98);padding:10px 14px 32px;border-top:.5px solid rgba(255,255,255,.05)}
 .hint-txt{text-align:center;color:rgba(255,255,255,.35);font-size:11px;margin-bottom:9px}
 .scroll-strip{display:flex;gap:10px;overflow-x:auto;padding-bottom:2px;scrollbar-width:none}
 .scroll-strip::-webkit-scrollbar{display:none}
-.strip-card{
-  min-width:110px;flex-shrink:0;
-  background:rgba(18,18,18,.98);border:.5px solid rgba(255,255,255,.1);
-  border-radius:16px;padding:11px 10px;cursor:pointer;
-  transition:border-color .2s,transform .15s;text-align:center;
-}
+.strip-card{min-width:110px;flex-shrink:0;background:rgba(18,18,18,.98);border:.5px solid rgba(255,255,255,.1);border-radius:16px;padding:11px 10px;cursor:pointer;transition:border-color .2s,transform .15s;text-align:center}
 .strip-card.active{border-color:#e8a838;box-shadow:0 0 14px rgba(232,168,56,.3)}
 .strip-card:active{transform:scale(.96)}
 .strip-name{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3}
@@ -156,7 +128,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
       <div class="info-price" id="iPrice"></div>
     </div>
     <div class="info-stats" id="iStats"></div>
-    <div class="info-tags"  id="iTags"></div>
+    <div class="info-tags" id="iTags"></div>
     <div class="info-ingr">
       <div class="ingr-label">Орц найрлага</div>
       <div class="ingr-text" id="iIngr"></div>
@@ -242,28 +214,59 @@ async function startCamera(){
   MENU.forEach(item=>loadGLB(item.glb,()=>{}));
 }
 
+function getSheetTop(){
+  // bottom-sheet-ийн дээд ирмэгийн Y байрлал (px)
+  return document.getElementById('bottom-sheet').getBoundingClientRect().top;
+}
+
+function updateCameraForSheet(){
+  // Загвар мэдээллийн дээд ирмэгээс дээш 60px байрлалд харагдана
+  const sheetTop = getSheetTop();
+  const targetY  = sheetTop - 60; // px, дэлгэцийн дээд талаас
+  // NDC координат руу хөрвүүлэх (-1..1)
+  const ndcY = 1 - (targetY / window.innerHeight) * 2;
+  // camera lookAt-ийн y-г тохируулна
+  // ndcY 0 = дунд, 1 = дээд, -1 = доод
+  // Three.js-д lookAt y = ndcY * tan(fov/2) * distance
+  const fovRad = camera.fov * Math.PI / 180;
+  const dist   = camera.position.z;
+  const worldY = ndcY * Math.tan(fovRad/2) * dist;
+  camera.lookAt(0, worldY, 0);
+  camera.updateProjectionMatrix();
+}
+
 function initThree(){
   const canvas=document.getElementById('three-canvas');
-  const W=window.innerWidth,H=window.innerHeight;
+  const W=window.innerWidth, H=window.innerHeight;
   renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setSize(W,H); renderer.setClearColor(0,0);
-  scene=new THREE.Scene(); clock=new THREE.Clock();
+  renderer.setSize(W,H);
+  renderer.setClearColor(0,0);
+  scene=new THREE.Scene();
+  clock=new THREE.Clock();
   camera=new THREE.PerspectiveCamera(45,W/H,0.01,100);
-  camera.position.set(0,0.4,3.5); camera.lookAt(0,0.6,0);
+  camera.position.set(0,1.2,3.5);
+  camera.lookAt(0,0,0);
+
   scene.add(new THREE.AmbientLight(0xffffff,0.8));
   const dir=new THREE.DirectionalLight(0xfff5e0,1.4);
   dir.position.set(2,4,3);scene.add(dir);
   const fill=new THREE.PointLight(0xe8a838,0.5,12);
   fill.position.set(-2,2,1);scene.add(fill);
   scene.add(new THREE.DirectionalLight(0xffffff,0.3)).position.set(0,-2,-3);
+
   canvas.addEventListener('touchstart',onTS,{passive:false});
   canvas.addEventListener('touchmove', onTM,{passive:false});
   canvas.addEventListener('touchend',  onTE,{passive:false});
+
   window.addEventListener('resize',()=>{
     const W=window.innerWidth,H=window.innerHeight;
-    renderer.setSize(W,H);camera.aspect=W/H;camera.updateProjectionMatrix();
+    renderer.setSize(W,H);
+    camera.aspect=W/H;
+    camera.updateProjectionMatrix();
+    if(currentModel) updateCameraForSheet();
   });
+
   canvas.style.display='none';
   animateLoop();
 }
@@ -280,8 +283,13 @@ function animateLoop(){
 
 function onTS(e){
   e.preventDefault();lastTouch=Date.now();autoRotate=false;
-  if(e.touches.length===1){drag={x:e.touches[0].clientX,y:e.touches[0].clientY,rotX,rotY};pinch=null;showHint('☝️ Эргүүлэх');}
-  else if(e.touches.length===2){pinch={dist:tDist(e.touches),scale:modelScale};drag=null;showHint('🤏 Томруулах');}
+  if(e.touches.length===1){
+    drag={x:e.touches[0].clientX,y:e.touches[0].clientY,rotX,rotY};
+    pinch=null;showHint('☝️ Эргүүлэх');
+  } else if(e.touches.length===2){
+    pinch={dist:tDist(e.touches),scale:modelScale};
+    drag=null;showHint('🤏 Томруулах');
+  }
 }
 function onTM(e){
   e.preventDefault();lastTouch=Date.now();
@@ -291,7 +299,7 @@ function onTM(e){
     rotX=drag.rotX+(dy/window.innerHeight)*Math.PI*1.5;
     rotX=Math.max(-Math.PI/2,Math.min(Math.PI/2,rotX));
     if(currentModel){currentModel.rotation.x=rotX;currentModel.rotation.y=rotY;}
-  }else if(e.touches.length===2&&pinch){
+  } else if(e.touches.length===2&&pinch){
     modelScale=Math.max(SCALE_MIN,Math.min(SCALE_MAX,pinch.scale*tDist(e.touches)/pinch.dist));
     if(currentModel)currentModel.scale.setScalar(modelScale);
   }
@@ -301,8 +309,14 @@ function onTE(e){
   setTimeout(()=>{if(Date.now()-lastTouch>=2000)autoRotate=true;},2000);
 }
 function tDist(t){return Math.hypot(t[0].clientX-t[1].clientX,t[0].clientY-t[1].clientY);}
+
 let hTimer;
-function showHint(m){const el=document.getElementById('ghint');el.textContent=m;el.style.display='block';clearTimeout(hTimer);}
+function showHint(m){
+  const el=document.getElementById('ghint');
+  const sheetTop=getSheetTop();
+  el.style.top=(sheetTop-48)+'px';
+  el.textContent=m;el.style.display='block';clearTimeout(hTimer);
+}
 function hideHint(){hTimer=setTimeout(()=>{document.getElementById('ghint').style.display='none';},900);}
 
 function loadGLB(file,cb){
@@ -339,6 +353,7 @@ function selectItem(idx){
 
   if(currentModel){scene.remove(currentModel);currentModel=null;}
   document.getElementById('three-canvas').style.display='none';
+
   if(!cache[item.glb]){
     document.getElementById('loading').style.display='flex';
     document.getElementById('load-msg').textContent=item.name+' ачааллаж байна...';
@@ -349,8 +364,11 @@ function selectItem(idx){
     const clone=model.clone();
     rotX=0.15;rotY=0;modelScale=0.5;autoRotate=true;
     clone.scale.setScalar(modelScale);
-    scene.add(clone);currentModel=clone;
+    scene.add(clone);
+    currentModel=clone;
     document.getElementById('three-canvas').style.display='block';
+    // Камерыг sheet-ийн дээд ирмэгт тулгуурлан тохируулна
+    requestAnimationFrame(()=>updateCameraForSheet());
   });
 }
 
@@ -361,6 +379,8 @@ function closeInfo(){
   document.getElementById('bottom-hint').textContent='👇 Хоол сонгоно уу';
   document.querySelectorAll('.strip-card').forEach(el=>el.classList.remove('active'));
   if(currentModel){scene.remove(currentModel);currentModel=null;}
+  // Camera буцаана
+  camera.lookAt(0,0,0);
 }
 
 function buildStrip(){
