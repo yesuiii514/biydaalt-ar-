@@ -128,13 +128,15 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
     id="mv"
     alt="AR model"
     ar
-    ar-modes="webxr scene-viewer quick-look"
+    ar-modes="scene-viewer webxr quick-look"
     ar-placement="floor"
     camera-controls
-    shadow-intensity="0.8"
-    exposure="1"
-    environment-image="neutral"
-    loading="lazy"
+    auto-rotate
+    shadow-intensity="1"
+    exposure="1.2"
+    tone-mapping="commerce"
+    loading="eager"
+    reveal="auto"
   ></model-viewer>
 </div>
 
@@ -428,10 +430,19 @@ function openAR(){
   if(activeIdx===null)return;
   const item=MENU[activeIdx];
   const mv=document.getElementById('mv');
-  mv.src=item.glb;
+  mv.setAttribute('src', item.glb);
   document.getElementById('mv-wrap').style.display='block';
-  // AR session шууд эхлүүлэх
-  setTimeout(()=>{ mv.activateAR && mv.activateAR(); },600);
+  // Model бэлэн болсны дараа AR эхлүүлнэ
+  const tryAR = ()=>{
+    if(mv.canActivateAR){
+      mv.activateAR();
+    } else {
+      mv.addEventListener('load', ()=>{ 
+        setTimeout(()=>mv.activateAR && mv.activateAR(), 300);
+      }, {once:true});
+    }
+  };
+  setTimeout(tryAR, 400);
 }
 function closeAR(){
   document.getElementById('mv-wrap').style.display='none';
