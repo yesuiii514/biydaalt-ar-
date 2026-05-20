@@ -429,20 +429,34 @@ function closeInfo(){
 function openAR(){
   if(activeIdx===null)return;
   const item=MENU[activeIdx];
+  const glbUrl = new URL(item.glb, location.href).href;
+  const isIOS  = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  const isAndroid = /Android/.test(navigator.userAgent);
+
+  if(isAndroid){
+    // Android: scene-viewer intent — камер шууд нээж AR эхэлнэ
+    const intent = 'intent://arvr.google.com/scene-viewer/1.0'
+      + '?file=' + encodeURIComponent(glbUrl)
+      + '&mode=ar_only'
+      + '#Intent;scheme=https;package=com.google.android.googlequicksearchbox;action=android.intent.action.VIEW;S.browser_fallback_url='
+      + encodeURIComponent(glbUrl)
+      + ';end;';
+    location.href = intent;
+    return;
+  }
+
+  if(isIOS){
+    // iOS: Quick Look — .usdz шаардана, GLB дэмжихгүй
+    // model-viewer-ээр fallback
+  }
+
+  // Fallback: model-viewer popup + activateAR
   const mv=document.getElementById('mv');
   mv.setAttribute('src', item.glb);
   document.getElementById('mv-wrap').style.display='block';
-  // Model бэлэн болсны дараа AR эхлүүлнэ
-  const tryAR = ()=>{
-    if(mv.canActivateAR){
-      mv.activateAR();
-    } else {
-      mv.addEventListener('load', ()=>{ 
-        setTimeout(()=>mv.activateAR && mv.activateAR(), 300);
-      }, {once:true});
-    }
-  };
-  setTimeout(tryAR, 400);
+  mv.addEventListener('load', ()=>{
+    setTimeout(()=>{ if(mv.canActivateAR) mv.activateAR(); }, 300);
+  }, {once:true});
 }
 function closeAR(){
   document.getElementById('mv-wrap').style.display='none';
