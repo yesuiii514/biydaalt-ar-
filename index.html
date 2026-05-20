@@ -91,12 +91,53 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
 .strip-name{font-size:12px;font-weight:600;color:#fff;margin-bottom:4px;line-height:1.3}
 .strip-price{font-size:12px;color:#e8a838;font-weight:700;margin-bottom:3px}
 .strip-meta{font-size:10px;color:rgba(255,255,255,.3)}
+
+/* AR товч */
+#ar-btn{
+  position:fixed;bottom:175px;right:16px;z-index:41;
+  background:#e8a838;color:#000;border:none;border-radius:50px;
+  padding:11px 18px;font-size:13px;font-weight:700;cursor:pointer;
+  box-shadow:0 4px 20px rgba(232,168,56,.5);display:none;
+  white-space:nowrap;
+}
+/* model-viewer AR overlay */
+#mv-wrap{
+  position:fixed;inset:0;z-index:100;display:none;
+  background:#000;
+}
+#mv-wrap model-viewer{
+  width:100%;height:100%;
+}
+#mv-close{
+  position:fixed;top:16px;right:16px;z-index:101;
+  background:rgba(0,0,0,.6);color:#fff;border:none;
+  width:40px;height:40px;border-radius:50%;font-size:20px;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+}
 </style>
 </head>
 <body>
 
 <video id="video" autoplay playsinline muted></video>
 <canvas id="three-canvas"></canvas>
+<button id="ar-btn" onclick="openAR()">🪄 AR дээр харах</button>
+
+<div id="mv-wrap">
+  <button id="mv-close" onclick="closeAR()">✕</button>
+  <model-viewer
+    id="mv"
+    alt="AR model"
+    ar
+    ar-modes="webxr scene-viewer quick-look"
+    ar-placement="floor"
+    camera-controls
+    shadow-intensity="0.8"
+    exposure="1"
+    environment-image="neutral"
+    loading="lazy"
+  ></model-viewer>
+</div>
+
 <div id="ghint"></div>
 
 <div id="overlay">
@@ -140,6 +181,7 @@ html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:'Se
   </div>
 </div>
 
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <script>
@@ -147,8 +189,8 @@ const MENU = [
   {
     name:"Гоймон", price:"₮12,000", glb:"noodle.glb",
     kcal:520, time:15, rating:4.4, orders:38,
-    tags:[{l:"🌶️ Халуун ногоотой",c:"hot"},{l:"🔥 Хит",c:"gold"},{l:"Шөл",c:""},{l:"Гурил",c:""}],
-    ingr:"Гоймон, үхрийн мах(нэмэлтээр), өндөг, гүчүжан, сонгино, давс",
+    tags:[{l:"🌶️ Халуун",c:"hot"},{l:"🔥 Хит",c:"gold"},{l:"Шөл",c:""},{l:"Гурил",c:""}],
+    ingr:"Гар гурил, тэмээний мах, өндөг, гүчүжан, сонгино, давс",
   },
   {
     name:"Пицца", price:"₮25,000", glb:"pizza.glb",
@@ -160,13 +202,13 @@ const MENU = [
     name:"Бургер", price:"₮18,000", glb:"burger.glb",
     kcal:740, time:12, rating:4.2, orders:45,
     tags:[{l:"🥩 Мах",c:"hot"},{l:"🧀 Бяслаг",c:""},{l:"Шарсан",c:""},{l:"Шинэ",c:""}],
-    ingr:"Үхрийн мах, талх, помидор, огурцы, бяслаг, байцаа, майонез, хиам",
+    ingr:"Үхрийн мах, талх, помидор, огурец, бяслаг, байцаа, майонез",
   },
   {
     name:"Хот дог", price:"₮5,000", glb:"hotdog.glb",
     kcal:310, time:5, rating:3.9, orders:29,
     tags:[{l:"⚡ Хурдан",c:"green"},{l:"💛 Хямд",c:"gold"},{l:"Шарсан",c:""},{l:"Франк",c:""}],
-    ingr:"Талх, зайдас, горчица, кетчуп, сонгино, гич",
+    ingr:"Франкфурт сосиск, хот дог талх, горчица, кетчуп, сонгино",
   },
 ];
 
@@ -221,7 +263,7 @@ function getSheetTop(){
 
 function updateCameraForSheet(){
   // Дэлгэцийн дээд ирмэгээс 400px доор загвар харагдана
-  const targetY = 650; // px, дэлгэцийн дээд талаас
+  const targetY = 400; // px, дэлгэцийн дээд талаас
   // NDC: дээд=1, доод=-1, дунд=0
   const ndcY = 1 - (targetY / window.innerHeight) * 2;
   const fovRad = camera.fov * Math.PI / 180;
@@ -346,6 +388,7 @@ function selectItem(idx){
   document.getElementById('iIngr').textContent=item.ingr;
   document.getElementById('info').style.display='block';
   document.getElementById('bottom-hint').textContent='☝️ Эргүүлж томруулж харна уу';
+    document.getElementById('ar-btn').style.display='block';
 
   if(currentModel){scene.remove(currentModel);currentModel=null;}
   document.getElementById('three-canvas').style.display='none';
@@ -373,10 +416,25 @@ function closeInfo(){
   document.getElementById('info').style.display='none';
   document.getElementById('three-canvas').style.display='none';
   document.getElementById('bottom-hint').textContent='👇 Хоол сонгоно уу';
+  document.getElementById('ar-btn').style.display='none';
   document.querySelectorAll('.strip-card').forEach(el=>el.classList.remove('active'));
   if(currentModel){scene.remove(currentModel);currentModel=null;}
   // Camera буцаана
   camera.lookAt(0,0,0);
+}
+
+
+function openAR(){
+  if(activeIdx===null)return;
+  const item=MENU[activeIdx];
+  const mv=document.getElementById('mv');
+  mv.src=item.glb;
+  document.getElementById('mv-wrap').style.display='block';
+  // AR session шууд эхлүүлэх
+  setTimeout(()=>{ mv.activateAR && mv.activateAR(); },600);
+}
+function closeAR(){
+  document.getElementById('mv-wrap').style.display='none';
 }
 
 function buildStrip(){
